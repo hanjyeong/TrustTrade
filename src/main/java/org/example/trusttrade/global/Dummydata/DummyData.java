@@ -78,13 +78,16 @@ public class DummyData {
 
     private void createDummyCategories() {
         Category category1 = Category.builder().categoryName("전자제품").build();
-        Category category2 = Category.builder().categoryName("가구").build();
-        Category category3 = Category.builder().categoryName("의류").build();
-        Category category4 = Category.builder().categoryName("기타").build();
+        Category category2 = Category.builder().categoryName("주방용품").build();
+        Category category3 = Category.builder().categoryName("가구").build();
+        Category category4 = Category.builder().categoryName("의류").build();
+        Category category5 = Category.builder().categoryName("기타").build();
         categoryRepository.save(category1);
         categoryRepository.save(category2);
         categoryRepository.save(category3);
         categoryRepository.save(category4);
+        categoryRepository.save(category5);
+
     }
 
     private void createDummyProducts() {
@@ -129,15 +132,19 @@ public class DummyData {
             List<ItemImage> images = List.of(
                     ItemImage.builder()
                             .item(product)
-                            .image("https://example.com/img" + (2 * i - 1) + ".jpg")
+                            .imageUrl("https://example.com/img" + (2 * i - 1) + ".jpg")
+                            .main_Image(true)
                             .savedTime(LocalDateTime.now())
                             .build(),
+
                     ItemImage.builder()
                             .item(product)
-                            .image("https://example.com/img" + (2 * i) + ".jpg")
+                            .imageUrl("https://example.com/img" + (2 * i) + ".jpg")
+                            .main_Image(false)
                             .savedTime(LocalDateTime.now())
                             .build()
             );
+
             itemImageRepository.saveAll(images);
 
             List<ItemCategory> mappings = List.of(
@@ -193,15 +200,19 @@ public class DummyData {
             List<ItemImage> images = List.of(
                     ItemImage.builder()
                             .item(auction)
-                            .image("https://example.com/auction" + (2 * i - 1) + ".jpg")
+                            .imageUrl("https://example.com/auction" + (2 * i - 1) + ".jpg")
+                            .main_Image(true)   // 대표 이미지
                             .savedTime(LocalDateTime.now())
                             .build(),
+
                     ItemImage.builder()
                             .item(auction)
-                            .image("https://example.com/auction" + (2 * i) + ".jpg")
+                            .imageUrl("https://example.com/auction" + (2 * i) + ".jpg")
+                            .main_Image(false)  // 서브 이미지
                             .savedTime(LocalDateTime.now())
                             .build()
             );
+
             itemImageRepository.saveAll(images);
 
             List<ItemCategory> mappings = List.of(

@@ -28,6 +28,7 @@ public class Product extends Item {
     private ProductStatus status;
 
     public static Product fromDto(BasicItemDto dto, User seller) {
+
         // 1) ProductLocation  생성
         ProductLocation loc = ProductLocation.fromDto(dto);
 
@@ -35,7 +36,7 @@ public class Product extends Item {
         return Product.builder()
                 // Item 필드
                 .user(seller)
-                .name(dto.getName())
+                .name(dto.getTitle())
                 .description(dto.getDescription())
                 .productLocation(loc)
                 .createdTime(LocalDateTime.now())
@@ -44,8 +45,6 @@ public class Product extends Item {
                 .productPrice(dto.getPrice())
                 .status(ProductStatus.SALE)
                 .build();
-
-
     }
 
 }

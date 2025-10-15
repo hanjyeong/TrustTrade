@@ -6,6 +6,7 @@ import org.example.trusttrade.item.domain.Category;
 import org.example.trusttrade.item.domain.Item;
 import org.example.trusttrade.item.domain.ItemCategory;
 import org.example.trusttrade.item.domain.ItemImage;
+import org.example.trusttrade.item.dto.request.CategoryDto;
 import org.example.trusttrade.item.repository.*;
 import org.example.trusttrade.item.dto.response.ItemResponseDto;
 import org.example.trusttrade.repository.AuctionRepository;
@@ -30,25 +31,12 @@ public class ItemService {
     private final AuctionRepository auctionRepository;
 
     @Transactional
-    public void saveItemDetails(Item item, List<String> imageUrls, List<Integer> categoryIds) {
-        log.debug("saveItemDetails 시작: itemId={}, imageCount={}, categoryCount={}",
-                item.getId(),
-                imageUrls == null ? 0 : imageUrls.size(),
-                categoryIds == null ? 0 : categoryIds.size());
+    public void saveItemDetails(Item item,List<Integer> categoryIds) {
 
-        // 1) 이미지 저장
-        if (imageUrls != null && !imageUrls.isEmpty()) {
-            List<ItemImage> images = ItemImage.fromDto(item, imageUrls);
-            log.debug("이미지 변환 완료: itemId={}, imagesToSave={}", item.getId(), images.size());
-
-            itemImageRepository.saveAll(images);
-            log.debug("이미지 저장 완료: itemId={}, savedImages={}", item.getId(), images.size());
-        } else {
-            log.debug("저장할 이미지 없음: itemId={}", item.getId());
-        }
-
-        // 2) 카테고리 매핑
+        // 카테고리 매핑
         if (categoryIds != null && !categoryIds.isEmpty()) {
+
+            // 유효한 카테고리 ID 인지 조회
             List<Category> categories = categoryService.getValidCategories(categoryIds);
             List<Long> categoryIdList = categories.stream()
                     .map(Category::getId)
@@ -63,8 +51,6 @@ public class ItemService {
         } else {
             log.debug("매핑할 카테고리 없음: itemId={}", item.getId());
         }
-
-        log.debug("saveItemDetails 완료: itemId={}", item.getId());
     }
 
 
@@ -77,18 +63,39 @@ public class ItemService {
         } else if ("AUCTION".equalsIgnoreCase(itemType)) {
             items = auctionRepository.findAll();
         } else {
-            throw new IllegalArgumentException("Unknown item type");
+            throw new IllegalArgumentException("존재하지 않는 아이템 타입 입니다");
         }
 
         return items.stream()
                 .map(item -> new ItemResponseDto(
                         item.getId(),
                         item.getName(),
-                        item.getItemType(), // now works via @Transient
+                        item.getItemType(),
                         item.getDescription()
                 ))
                 .collect(Collectors.toList());
     }
+
+    // 카테고리별 상품 조회
+    public List<ItemResponseDto> findByCategoryAndType(CategoryDto categoryDto) {
+
+        List<ItemCategory> itemCategories = itemCategoryRepository.findByCategory_Id(categoryDto.getCategoryId());
+
+        return itemCategories.stream()
+                .map(ItemCategory::getItem)
+                .filter(item -> item.getItemType().equals(categoryDto.getItemType())) // "PRODUCT" or "AUCTION"
+                .map(item -> new ItemResponseDto(
+                        item.getId(),
+                        item.getName(),
+                        item.getItemType(),
+                        item.getDescription()
+                ))
+                .collect(Collectors.toList());
+    }
+
+
 }
+
+
 
 

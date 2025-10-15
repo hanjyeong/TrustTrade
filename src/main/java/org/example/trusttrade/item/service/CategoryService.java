@@ -14,6 +14,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    // 카테고리 매핑
     public List<Category> getValidCategories(List<Integer> categoryIds) {
         return categoryIds.stream()
                 .limit(3) // 최대 3개의 카테고리 설정

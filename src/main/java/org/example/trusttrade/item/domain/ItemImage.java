@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,31 +24,47 @@ public class ItemImage {
     @Column(name="item_image_id")
     private Long id;
 
-    @Column(name = "image")
-    private String image;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id",nullable = false)
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    @Column(name = "saved_time",nullable = false)
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
+
+    @Column(name = "main_Image", nullable = false)
+    private boolean main_Image; // 해당 사진이 대표 이미지인지를 구분하기 위함
+
+    @Column(name = "saved_time", nullable = false)
     private LocalDateTime savedTime;
 
+    // itemImage 객체 생성(대표이미지,서브 이미지 분리)
+    public static List<ItemImage> fromMainAndSub(Item item, String mainImage, List<String> subImages) {
 
-    // 이미지 저장
-    public static List<ItemImage> fromDto(Item item, List<String> imageUrls) {
-        if (imageUrls == null || imageUrls.isEmpty()) {
-            return Collections.emptyList();
+        List<ItemImage> result = new ArrayList<>();
+
+        // 대표 이미지
+        if (mainImage != null) {
+            result.add(ItemImage.builder()
+                    .imageUrl(mainImage)
+                    .main_Image(true)
+                    .item(item)
+                    .savedTime(LocalDateTime.now())
+                    .build());
         }
 
-        return imageUrls.stream()
-                .limit(5) // 최대 5장
-                .map(url -> ItemImage.builder()
-                        .image(url)
-                        .item(item)
-                        .savedTime(LocalDateTime.now())
-                        .build())
-                .collect(Collectors.toList());
-    }
+        // 서브 이미지
+        if (subImages != null) {
+            subImages.forEach(url -> result.add(
+                    ItemImage.builder()
+                            .imageUrl(url)
+                            .main_Image(false)
+                            .item(item)
+                            .savedTime(LocalDateTime.now())
+                            .build()
+            ));
+        }
 
+        return result;
+    }
 }
+

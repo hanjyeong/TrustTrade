@@ -21,7 +21,7 @@ public class AuctionService {
     private final AuctionRepository auctionRepository;
     private final ItemService itemService;
 
-    @Transactional
+   /* @Transactional
     public void registerAuction(AuctionItemDto dto, User seller) {
         // 1) Auction 객체 생성
         Auction auction = Auction.fromDto(dto, seller);
@@ -33,7 +33,7 @@ public class AuctionService {
         itemService.saveItemDetails(auction, dto.getImages(), dto.getCategoryIds());
         log.debug("이미지·카테고리 저장 완료: auctionId={}", auction.getId());
     }
-
+*/
     //경매 조죄 by sellerId
     @Transactional
     public List<Auction> getAuctionsBySeller(UUID sellerId) {
