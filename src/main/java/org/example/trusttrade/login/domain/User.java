@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.example.trusttrade.domain.SellerAccount;
 import org.example.trusttrade.domain.order.Settlement;
+import org.example.trusttrade.dto.SignUpRequest;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -24,6 +25,12 @@ public class User {
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID id;
+
+    @Column(name="userAccount")
+    private String userAccount;
+
+    @Column(name = "userPw")
+    private String userPw;
 
     @Column(name = "email")
     private String email;
@@ -62,6 +69,18 @@ public class User {
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Settlement> settlements;
+
+
+    // User 객체 생성
+    public static User createUser(SignUpRequest request, String encodedPw) {
+        return User.builder()
+                .userAccount(request.getAccount())
+                .userPw(encodedPw)
+                .email(request.getEmail())
+                .role(Role.USER)   // 기본 회원가입이므로 USER 권한
+                .build();
+    }
+
 
     @PrePersist
     public void prePersist() {
