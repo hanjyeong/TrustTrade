@@ -1,10 +1,7 @@
 package org.example.trusttrade.order.controller;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.trusttrade.order.domain.Order;
 import org.example.trusttrade.order.dto.ConfirmPaymentRequest;
-import org.example.trusttrade.order.dto.OrderPaymentResDto;
 import org.example.trusttrade.order.dto.PaymentErrorResponse;
 import org.example.trusttrade.order.service.PaymentService;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +14,6 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-
-//    //결제 정보 검증
-//    @PostMapping("/verify")
-//    public ResponseEntity<?> verifyPayment(@RequestBody OrderPaymentResDto orderPaymentResDto) {
-//
-//        Order order = paymentService.verifyPayment(orderPaymentResDto);
-//        if (order == null) {
-//            return ResponseEntity.badRequest().body(PaymentErrorResponse.builder()
-//                    .code(400)
-//                    .message("결제 금액 정보가 유효하지 않습니다.")
-//                    .build());
-//        } else {
-//            return ResponseEntity.ok("결제 정보가 검증되었습니다.");
-//        }
-//    }
 
     //결제 인증 api 호출
     @PostMapping("/confirm")
