@@ -23,6 +23,7 @@ public class CategoryService {
                 .toList();
     }
 
+    // 카테고리 전체 조회
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryDto {
+public class    CategoryDto {
     Long categoryId;
-    String itemType; // 일반, 경매 물품 구분
+    String itemType; // "PRODUCT" or "AUCTION"
 }

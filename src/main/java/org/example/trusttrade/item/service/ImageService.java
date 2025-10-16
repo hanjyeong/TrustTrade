@@ -1,11 +1,13 @@
 package org.example.trusttrade.item.service;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.example.trusttrade.item.dto.StoredImage;
+import org.example.trusttrade.item.dto.request.ItemImageAttachable;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,7 +45,7 @@ public class ImageService {
         }
     }
 
-
+    // 이미지 업로드
     public List<StoredImage> uploadImages(List<MultipartFile> files) {
         if (files == null || files.isEmpty()) return Collections.emptyList();
 
@@ -68,9 +70,28 @@ public class ImageService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 업로드된 실제 파일들을 삭제(등록 실패 등 롤백 시 호출)
-     */
+    // 사진 등록 및 url 저장
+    @Transactional
+    public List<StoredImage> processImagesAndSetDto(List<MultipartFile> images, ItemImageAttachable dto) {
+        List<StoredImage> storedImages = uploadImages(images);
+        List<String> urls = storedImages.stream()
+                .map(StoredImage::getUrl)
+                .toList();
+
+        // 대표 사진 및 일반 사진 등록
+        if (!urls.isEmpty()) {
+            dto.setMainImage(urls.get(0));
+            if (urls.size() > 1) {
+                dto.setSubImages(urls.subList(1, urls.size()));
+            }
+        }
+
+        return storedImages;
+    }
+
+
+
+    // 업로드 실패시 업로드된 사진 삭제
     public void deleteFiles(List<StoredImage> storedImages) {
         if (storedImages == null) return;
         for (StoredImage si : storedImages) {

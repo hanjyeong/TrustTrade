@@ -11,7 +11,7 @@ import org.example.trusttrade.item.domain.products.ProductLocation;
 
 import org.example.trusttrade.login.domain.User;
 
-import org.example.trusttrade.dto.AuctionItemDto;
+import org.example.trusttrade.item.dto.request.AuctionItemDto;
 import org.example.trusttrade.dto.AuctionUpdateDto;
 
 import java.time.LocalDateTime;
@@ -42,11 +42,13 @@ public class Auction extends Item {
     @OneToMany(mappedBy = "auction")
     private List<Bids> bids;
 
+
     public static Auction fromDto(AuctionItemDto dto, User seller){
+
         // 위치 정보 생성/조회
         ProductLocation loc = ProductLocation.fromDto(dto);
 
-        // 3) Auction 엔티티
+        // Auction 엔티티
         return Auction.builder()
                 // Item
                 .user(seller)
@@ -54,6 +56,7 @@ public class Auction extends Item {
                 .description(dto.getDescription())
                 .productLocation(loc)
                 .createdTime(LocalDateTime.now())
+
                 // Auction
                 .startPrice(dto.getStartPrice())
                 .bidUnit(dto.getBidUnit())

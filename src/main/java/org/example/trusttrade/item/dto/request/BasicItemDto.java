@@ -12,7 +12,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BasicItemDto {
+public class BasicItemDto extends AbstractItemImageDto {
 
     @NotNull
     private String title;
@@ -22,13 +22,6 @@ public class BasicItemDto {
 
     @NotNull
     private String description;
-
-    // 대표 사진
-    private String mainImage;
-
-    // 나머지 사진 (최대 4장)
-    @Size(max = 4, message = "추가 이미지는 최대 4장까지 첨부할 수 있습니다.")
-    private List<String> subImages;
 
     // 판매자 정보
     @NotNull
@@ -45,3 +38,4 @@ public class BasicItemDto {
     @NotNull
     private Double longitude;
 }
+
