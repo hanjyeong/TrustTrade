@@ -8,6 +8,7 @@ import org.example.trusttrade.order.client.TossPaymentClient;
 import org.example.trusttrade.order.domain.Order;
 import org.example.trusttrade.order.dto.ConfirmPaymentRequest;
 import org.example.trusttrade.order.dto.OrderPaymentResDto;
+import org.example.trusttrade.order.exception.OrderCancellationException;
 import org.example.trusttrade.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,12 +27,14 @@ public class PaymentService {
     private final TossPaymentClient tossPaymentClient;
     private final NotificationService notificationService;
 
-    //결제 정보 검증
-    public Order verifyPayment(OrderPaymentResDto orderPaymentResDto) {
-        String orderId = orderPaymentResDto.getOrderId();
-        Order find = orderRepository.findById(orderId).orElse(null);
+    //결제 정보 검증 > confirm에서 같이 해도 되는거 아닌가
+    public Order verifyPayment(ConfirmPaymentRequest request) throws OrderCancellationException {
 
-        if (find.getAmount() == orderPaymentResDto.getAmount()) {
+        String orderId = request.getOrderId();
+        Order find = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
+
+        if (find.getAmount() == request.getAmount()) {
             return find;
         } else {
             return null;
@@ -41,15 +44,15 @@ public class PaymentService {
     //결제 정보 인증 api 호출
     public void confirmAndSavePayment(ConfirmPaymentRequest request) throws IOException, InterruptedException {
 
-        Order order = orderRepository.findById(request.getOrderId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
+        //요청과 승인 사이 결제 금액 무결성 검증
+        Order order = verifyPayment(request);
 
-        try {
-            HttpResponse<String> response = tossPaymentClient.requestConfirm(request);
-            int statusCode = response.statusCode();
-            String responseBody = response.body();
+        HttpResponse<String> response = tossPaymentClient.requestConfirm(request);
+        int statusCode = response.statusCode();
+        String responseBody = response.body();
 
-            if (statusCode == 200) {
+        if (statusCode == 200) {
+            try {
                 //payment키 설정
                 order.setPaymentKey(request.getPaymentKey());
                 // 주문 조회 및 상태 변경
@@ -60,33 +63,26 @@ public class PaymentService {
                 notificationService.createNotification(
                         "결제가 완료되었습니다.", order.getBuyer().getId());
 
-            } else {
-                // Toss 응답 실패 (ex. 결제 키 오류, 금액 불일치 등)
-                //알림처리
-                notificationService.createNotification(
-                        "결제 실패하였습니다. 다시 결제를 시도해주세요", order.getBuyer().getId());
-                //상태 변경
-                processOrderAndPayment(request.getOrderId(), false);
-                throw new IllegalStateException("결제 승인 실패: " + responseBody);
-            }
-        } catch (Exception e) {
-            // DB 처리 실패 → 결제 취소 요청
-            //취소 중 에러 처리
-            log.error("결제 처리 중 예외 발생: {}", e.getMessage(), e);
-            try {
+            } catch (Exception e) {
+                //주문 취소
                 HttpResponse cancelResponse = tossPaymentClient.requestPaymentCancel(
                         request.getPaymentKey(),
                         "결제 승인 후 DB 저장 실패로 인한 자동 취소");
-            }catch (Exception cancelEx) {
-                log.error("결제 취소 요청 실패: {}", cancelEx.getMessage(), cancelEx);
+                //상태 변경(paid -> cancle)
+                processOrderAndPayment(request.getOrderId(), false);
+                //알림 처리
+                notificationService.createNotification(
+                        "결제 정보 저장 실패로 결제가 최소되었습니다. 다시 결제를 시도해주세요", order.getBuyer().getId());
+                throw new OrderCancellationException("db 저장 실패로 결제 취소 " + cancelResponse.body());
             }
-            //상태 변경
-            processOrderAndPayment(request.getOrderId(), false);
-            //알림 처리
-            notificationService.createNotification(
-                    "결제 정보 저장에 실패하였습니다. 다시 결제를 시도해주세요", order.getBuyer().getId());
-        }
 
+        } else {
+            // Toss 응답 실패 (ex. 결제 키 오류, 금액 불일치 등)
+            //알림처리
+            notificationService.createNotification(
+                    "결제 실패하였습니다. 다시 결제를 시도해주세요", order.getBuyer().getId());
+            throw new OrderCancellationException("결제 승인 실패: " + responseBody);
+        }
     }
 
 
@@ -119,7 +115,7 @@ public class PaymentService {
             processOrderAndPayment(orderId, false);
             return orderRepository.findById(orderId).orElse(null);
         } else {
-            throw new IllegalStateException("주문 취소를 실패하였습니다. 다시 시도해주세요 : " + response.body());
+            throw new OrderCancellationException("주문 취소에 실패하였습니다. 다시 시도해주세요 : " + response.body());
         }
 
     }

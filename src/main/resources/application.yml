@@ -15,12 +15,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
+
 
 nts:
   api:
@@ -37,3 +38,13 @@ logging:
   level:
     org.hibernate.tool.schema.internal.SchemaDropperImpl: TRACE
     org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator: TRACE
+
+
+#토스 키
+toss:
+  widget:
+    secret-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6   # 위젯 시크릿 키
+  client:
+    key: test_ck_Poxy1XQL8RJ2D7NADbA487nO5Wml          # 클라이언트 키
+
+

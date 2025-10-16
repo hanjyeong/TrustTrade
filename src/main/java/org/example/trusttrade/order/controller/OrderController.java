@@ -1,14 +1,16 @@
 package org.example.trusttrade.order.controller;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.trusttrade.order.client.TossPaymentClient;
+import org.example.trusttrade.login.domain.User;
+import org.example.trusttrade.login.repository.UserRepository;
+import org.example.trusttrade.login.service.UserService;
 import org.example.trusttrade.order.domain.Order;
 import org.example.trusttrade.order.dto.OrderCancelDto;
 import org.example.trusttrade.order.dto.OrderPaymentResDto;
 import org.example.trusttrade.order.dto.OrderReqDto;
 import org.example.trusttrade.order.dto.OrderResDto;
-import org.example.trusttrade.order.repository.OrderRepository;
 import org.example.trusttrade.order.service.OrderService;
 import org.example.trusttrade.order.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -29,14 +32,20 @@ public class OrderController {
     private final OrderService orderService;
     @Autowired
     private final PaymentService paymentService;
+    @Autowired
+    private final UserRepository userRepository;
 
     //order 생성
     @PostMapping("/new")
     public ResponseEntity<OrderPaymentResDto> createOrder(@RequestBody OrderReqDto request) {
 
-        Order order = orderService.createOrder(request);
-        order.getBuyer().getId().toString();
+        //user 객체 id 검색
+        List<User> users = userRepository.findAll();
+        for (User user : users) {
+            System.out.println(user.getId());
+        }
 
+        Order order = orderService.createOrder(request);
 
         //필수 설정 : 1.amount - currency, value 2.orderId 3.orderName
         OrderPaymentResDto response = new OrderPaymentResDto(
@@ -45,7 +54,6 @@ public class OrderController {
                 order.getProductName());
 
         return ResponseEntity.ok(response);
-
     }
 
     //상품 수령시 order 상태 변경
@@ -69,6 +77,7 @@ public class OrderController {
         List<OrderResDto> response = orders.stream()
                 .map(OrderResDto::new)
                 .toList();
+
         return ResponseEntity.ok(response);
     }
 

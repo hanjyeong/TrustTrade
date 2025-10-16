@@ -3,9 +3,14 @@ package org.example.trusttrade.auction.controller;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.example.trusttrade.auction.domain.Auction;
+import org.example.trusttrade.auction.dto.AuctionItemDto;
 import org.example.trusttrade.auction.dto.AuctionUpdateDto;
 import org.example.trusttrade.auction.repository.AuctionRepository;
 import org.example.trusttrade.auction.service.AuctionService;
+import org.example.trusttrade.login.domain.User;
+import org.example.trusttrade.login.repository.UserRepository;
+import org.example.trusttrade.login.service.UserService;
+import org.example.trusttrade.order.dto.OrderReqDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
@@ -24,6 +29,21 @@ public class AuctionController {
 
     @Autowired private final AuctionService auctionService;
     @Autowired private final AuctionRepository auctionRepository;
+    @Autowired private final UserRepository userRepository;
+
+    //경매 생성
+    @PostMapping("/{sellerId}/new")
+    public ResponseEntity<?> createAuction(AuctionItemDto auctionItemDto,
+                                           @PathVariable("sellerId")UUID sellerId) {
+        try{
+            User seller = userRepository.findById(sellerId).orElseThrow();
+            auctionService.registerAuction(auctionItemDto, seller);
+
+            return ResponseEntity.ok("경매 생성 완료");
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 
     //경매 조회 by 판매자
