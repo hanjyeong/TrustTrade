@@ -19,8 +19,8 @@ import org.example.trusttrade.item.repository.ProductRepository;
 import org.example.trusttrade.login.domain.User;
 import org.example.trusttrade.login.domain.User.MemberType;
 import org.example.trusttrade.login.domain.User.Role;
-
 import org.example.trusttrade.login.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -38,6 +38,7 @@ public class DummyData {
     private final AuctionRepository auctionRepository;
     private final ItemImageRepository itemImageRepository;
     private final ItemCategoryRepository itemCategoryRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void init() {
@@ -49,8 +50,11 @@ public class DummyData {
     }
 
     private void createDummyUser() {
+        String encodedPw = passwordEncoder.encode("1234"); // 더미 계정 비밀번호: 1234
         User dummyUser = User.builder()
                 .id(UUID.fromString("ffd9c396-b70e-4d59-8d04-fad7b1fa1df2"))
+                .userAccount("dummyuser")
+                .userPw(encodedPw)
                 .email("dummyuser@example.com")
                 .profileImage("https://example.com/image.png")
                 .role(Role.USER)
@@ -63,8 +67,11 @@ public class DummyData {
     }
 
     private void createDummyBusinessUser() {
+        String encodedPw = passwordEncoder.encode("1234"); // 더미 비즈니스 계정 비밀번호: 1234
         User dummyBusinessUser = User.builder()
                 .id(UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890"))
+                .userAccount("businessuser")
+                .userPw(encodedPw)
                 .email("businessuser@example.com")
                 .profileImage("https://example.com/business.png")
                 .role(Role.USER)
@@ -87,7 +94,6 @@ public class DummyData {
         categoryRepository.save(category3);
         categoryRepository.save(category4);
         categoryRepository.save(category5);
-
     }
 
     private void createDummyProducts() {
@@ -97,7 +103,6 @@ public class DummyData {
         Category cat1 = categoryRepository.findById(1).orElseThrow();
         Category cat2 = categoryRepository.findById(2).orElseThrow();
 
-        // 3개의 서로 다른 ProductLocation 생성
         List<ProductLocation> locations = new ArrayList<>();
         locations.add(ProductLocation.builder()
                 .address("서울특별시 강남구 예시동 1")
@@ -115,7 +120,6 @@ public class DummyData {
                 .longitude(127.0290)
                 .build());
 
-        // 각 Product 생성 시 순차적으로 다른 location 적용
         for (int i = 1; i <= 3; i++) {
             ProductLocation loc = locations.get(i - 1);
             Product product = Product.builder()
@@ -144,7 +148,6 @@ public class DummyData {
                             .savedTime(LocalDateTime.now())
                             .build()
             );
-
             itemImageRepository.saveAll(images);
 
             List<ItemCategory> mappings = List.of(
@@ -155,7 +158,6 @@ public class DummyData {
         }
     }
 
-
     private void createDummyAuctions() {
         User business = userRepository.findById(
                 UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
@@ -163,7 +165,6 @@ public class DummyData {
         Category cat1 = categoryRepository.findById(1).orElseThrow();
         Category cat2 = categoryRepository.findById(3).orElseThrow();
 
-        // 3개의 서로 다른 ProductLocation 생성
         List<ProductLocation> auctionLocations = new ArrayList<>();
         auctionLocations.add(ProductLocation.builder()
                 .address("서울특별시 서초구 예시동 A")
@@ -181,7 +182,6 @@ public class DummyData {
                 .longitude(127.0340)
                 .build());
 
-        // 각 Auction 생성 시 순차적으로 다른 location 적용
         for (int i = 1; i <= 3; i++) {
             ProductLocation loc = auctionLocations.get(i - 1);
             Auction auction = Auction.builder()
@@ -201,18 +201,17 @@ public class DummyData {
                     ItemImage.builder()
                             .item(auction)
                             .imageUrl("https://example.com/auction" + (2 * i - 1) + ".jpg")
-                            .main_Image(true)   // 대표 이미지
+                            .main_Image(true)
                             .savedTime(LocalDateTime.now())
                             .build(),
 
                     ItemImage.builder()
                             .item(auction)
                             .imageUrl("https://example.com/auction" + (2 * i) + ".jpg")
-                            .main_Image(false)  // 서브 이미지
+                            .main_Image(false)
                             .savedTime(LocalDateTime.now())
                             .build()
             );
-
             itemImageRepository.saveAll(images);
 
             List<ItemCategory> mappings = List.of(
