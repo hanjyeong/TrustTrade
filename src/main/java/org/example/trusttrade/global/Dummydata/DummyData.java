@@ -20,7 +20,6 @@ import org.example.trusttrade.login.domain.User;
 import org.example.trusttrade.login.domain.User.MemberType;
 import org.example.trusttrade.login.domain.User.Role;
 import org.example.trusttrade.login.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -38,7 +37,7 @@ public class DummyData {
     private final AuctionRepository auctionRepository;
     private final ItemImageRepository itemImageRepository;
     private final ItemCategoryRepository itemCategoryRepository;
-    private final PasswordEncoder passwordEncoder;
+//    private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void init() {
@@ -50,7 +49,7 @@ public class DummyData {
     }
 
     private void createDummyUser() {
-        String encodedPw = passwordEncoder.encode("1234"); // 더미 계정 비밀번호: 1234
+        String encodedPw ="1234"; // 더미 계정 비밀번호: 1234
         User dummyUser = User.builder()
                 .id(UUID.fromString("ffd9c396-b70e-4d59-8d04-fad7b1fa1df2"))
                 .userAccount("dummyuser")
@@ -67,7 +66,7 @@ public class DummyData {
     }
 
     private void createDummyBusinessUser() {
-        String encodedPw = passwordEncoder.encode("1234"); // 더미 비즈니스 계정 비밀번호: 1234
+        String encodedPw = "1234"; // 더미 비즈니스 계정 비밀번호: 1234
         User dummyBusinessUser = User.builder()
                 .id(UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890"))
                 .userAccount("businessuser")

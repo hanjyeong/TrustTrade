@@ -3,6 +3,11 @@ package org.example.trusttrade.login.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.trusttrade.dto.SignUpRequest;
+import org.example.trusttrade.login.dto.LogInRequest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +45,42 @@ public class UserService {
         log.debug("권한 검증 통과: userId={} is BUSINESS", userId);
         return user;
     }
+
+    // 아이디 중복 체크
+    public void verifyAccountDuplicate(String account) {
+
+        log.debug("계정 중복 체크 요청 시작 account = {}", account);
+        if (userRepository.findByUserAccount(account).isPresent()) {
+            throw new DataIntegrityViolationException("이미 존재하는 계정입니다: " + account);
+        }
+        log.debug("계정 중복 체크 완료. account = {}", account);
+
+    }
+
+
+    @Transactional
+    public void signUp(SignUpRequest request) {
+            User user = User.createUser(request);
+            userRepository.save(user);
+            log.info("회원가입 성공: account = {}", request.getAccount());
+    }
+
+
+
+    // 로그인
+    public void userLogin(LogInRequest request) {
+
+        // 아이디 존재 여부 확인
+        User user = userRepository.findByUserAccount(request.getAccount())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        // 아이디 또는 비밀번호가 일치하지 않는 경우
+        if (!user.getUserPw().equals(request.getPassword()) || !user.getUserAccount().equals(request.getAccount())) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
 
     public Optional<User> findById(UUID id) {
         return userRepository.findById(id);

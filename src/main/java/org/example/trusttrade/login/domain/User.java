@@ -26,7 +26,7 @@ public class User {
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(name="userAccount")
+    @Column(name="userAccount",unique = true)
     private String userAccount;
 
     @Column(name = "userPw")
@@ -71,15 +71,17 @@ public class User {
     private java.util.List<Settlement> settlements;
 
 
-    // User 객체 생성
-    public static User createUser(SignUpRequest request, String encodedPw) {
+    public static User createUser(SignUpRequest request) {
         return User.builder()
                 .userAccount(request.getAccount())
-                .userPw(encodedPw)
+                .userPw(request.getPassword())
                 .email(request.getEmail())
-                .role(Role.USER)   // 기본 회원가입이므로 USER 권한
+                .roughAddress(request.getRoughAddress())
+                .role(Role.USER)
+                .memberType(MemberType.GENERAL)
                 .build();
     }
+
 
 
     @PrePersist
