@@ -6,9 +6,9 @@ import lombok.Setter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import org.example.trusttrade.domain.SellerAccount;
-import org.example.trusttrade.domain.order.Settlement;
-import org.example.trusttrade.dto.SignUpRequest;
+import org.example.trusttrade.global.domain.SellerAccount;
+import org.example.trusttrade.global.domain.order.Settlement;
+import org.example.trusttrade.global.dto.SignUpRequest;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

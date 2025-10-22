@@ -1,9 +1,9 @@
-package org.example.trusttrade.controller;
+package org.example.trusttrade.global.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.trusttrade.dto.AccountDto;
-import org.example.trusttrade.dto.SignUpRequest;
+import org.example.trusttrade.global.dto.AccountDto;
+import org.example.trusttrade.global.dto.SignUpRequest;
 import org.example.trusttrade.login.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

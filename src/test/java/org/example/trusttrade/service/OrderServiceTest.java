@@ -1,14 +1,15 @@
 package org.example.trusttrade.service;
 
+import org.example.trusttrade.global.service.OrderService;
 import org.example.trusttrade.item.domain.products.Product;
 import org.example.trusttrade.item.domain.products.ProductLocation;
 import org.example.trusttrade.item.domain.products.ProductStatus;
 
 import org.example.trusttrade.login.domain.User;
-import org.example.trusttrade.domain.order.Order;
-import org.example.trusttrade.dto.OrderReqDto;
+import org.example.trusttrade.global.domain.order.Order;
+import org.example.trusttrade.global.dto.OrderReqDto;
 import org.example.trusttrade.login.service.UserService;
-import org.example.trusttrade.repository.OrderRepository;
+import org.example.trusttrade.global.repository.OrderRepository;
 
 import org.example.trusttrade.item.repository.ProductLocationRepository;
 import org.example.trusttrade.item.repository.ProductRepository;

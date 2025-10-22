@@ -3,6 +3,7 @@ package org.example.trusttrade.item.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.trusttrade.global.dto.ProductResponseDto;
 import org.example.trusttrade.item.domain.products.Product;
 import org.example.trusttrade.item.dto.StoredImage;
 import org.example.trusttrade.item.dto.request.BasicItemDto;
@@ -59,5 +60,18 @@ public class ProductService {
     }
 
 
+    public List<ProductResponseDto> findProductsNearby(double lat, double lng) {
+        List<Product> products = productRepository.findNearby(lat, lng);
+        return products.stream()
+                .map(product -> ProductResponseDto.builder()
+                        .id(product.getId())
+                        .sellerAccount(product.getUser().getUserAccount()) // 판매자명 대신 계정 사용
+                        .title(product.getName())
+                        .price(product.getProductPrice())
+                        .latitude(product.getProductLocation().getLatitude())
+                        .longitude(product.getProductLocation().getLongitude())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
 }

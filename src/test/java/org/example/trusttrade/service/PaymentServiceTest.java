@@ -1,15 +1,17 @@
 package org.example.trusttrade.service;
 
+import org.example.trusttrade.global.service.OrderService;
+import org.example.trusttrade.global.service.PaymentService;
 import org.example.trusttrade.item.domain.products.Product;
 import org.example.trusttrade.item.domain.products.ProductLocation;
 import org.example.trusttrade.item.domain.products.ProductStatus;
 
 import org.example.trusttrade.login.domain.User;
 
-import org.example.trusttrade.domain.order.Order;
+import org.example.trusttrade.global.domain.order.Order;
 import org.example.trusttrade.item.dto.request.BasicItemDto;
-import org.example.trusttrade.dto.OrderPaymentResDto;
-import org.example.trusttrade.dto.OrderReqDto;
+import org.example.trusttrade.global.dto.OrderPaymentResDto;
+import org.example.trusttrade.global.dto.OrderReqDto;
 
 import org.example.trusttrade.item.repository.ProductLocationRepository;
 import org.example.trusttrade.item.repository.ProductRepository;
@@ -141,7 +143,7 @@ public class PaymentServiceTest {
 
         BasicItemDto dto = new BasicItemDto();
         // setter 또는 생성자를 통해 name, description, price, location 정보 설정
-        dto.setName("책상");
+        dto.setTitle("책상");
         dto.setDescription("상태 좋은 책상 팝니다");
         dto.setPrice(1500);
         dto.setLatitude(37.1234);

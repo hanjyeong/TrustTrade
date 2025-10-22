@@ -8,10 +8,9 @@ import org.example.trusttrade.item.dto.request.CategoryDto;
 import org.example.trusttrade.item.service.ProductService;
 import org.example.trusttrade.item.service.ImageService;
 import org.example.trusttrade.login.domain.User;
-import org.example.trusttrade.item.dto.request.AuctionItemDto;
 import org.example.trusttrade.item.dto.request.BasicItemDto;
 import org.example.trusttrade.item.dto.response.ItemResponseDto;
-import org.example.trusttrade.service.AuctionService;
+import org.example.trusttrade.global.service.AuctionService;
 import org.example.trusttrade.item.service.ItemService;
 
 import org.example.trusttrade.login.service.UserService;

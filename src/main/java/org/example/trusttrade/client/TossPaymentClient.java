@@ -1,13 +1,11 @@
 package org.example.trusttrade.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.example.trusttrade.dto.ConfirmPaymentRequest;
+import org.example.trusttrade.global.dto.ConfirmPaymentRequest;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;

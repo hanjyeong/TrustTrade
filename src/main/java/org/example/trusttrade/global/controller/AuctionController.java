@@ -1,19 +1,18 @@
-package org.example.trusttrade.controller;
+package org.example.trusttrade.global.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.trusttrade.auction.Auction;
-import org.example.trusttrade.dto.AuctionUpdateDto;
+import org.example.trusttrade.global.dto.AuctionUpdateDto;
 import org.example.trusttrade.item.dto.request.AuctionItemDto;
 import org.example.trusttrade.item.dto.request.CategoryDto;
 import org.example.trusttrade.item.dto.response.ItemResponseDto;
 import org.example.trusttrade.item.service.ItemService;
 import org.example.trusttrade.login.domain.User;
 import org.example.trusttrade.login.service.UserService;
-import org.example.trusttrade.repository.AuctionRepository;
-import org.example.trusttrade.service.AuctionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.trusttrade.global.repository.AuctionRepository;
+import org.example.trusttrade.global.service.AuctionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

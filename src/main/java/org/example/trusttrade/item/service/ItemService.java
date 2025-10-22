@@ -2,19 +2,13 @@ package org.example.trusttrade.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.trusttrade.auction.Auction;
-import org.example.trusttrade.item.domain.Category;
-import org.example.trusttrade.item.domain.Item;
 import org.example.trusttrade.item.domain.ItemCategory;
-import org.example.trusttrade.item.domain.ItemImage;
-import org.example.trusttrade.item.domain.products.Product;
 import org.example.trusttrade.item.dto.request.CategoryDto;
 import org.example.trusttrade.item.repository.*;
 import org.example.trusttrade.item.dto.response.ItemResponseDto;
-import org.example.trusttrade.repository.AuctionRepository;
+import org.example.trusttrade.global.repository.AuctionRepository;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;

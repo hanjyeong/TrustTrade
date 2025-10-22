@@ -1,14 +1,11 @@
-package org.example.trusttrade.controller;
+package org.example.trusttrade.global.controller;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.trusttrade.domain.order.Order;
-import org.example.trusttrade.dto.*;
-import org.example.trusttrade.service.NotificationService;
-import org.example.trusttrade.service.OrderService;
-import org.example.trusttrade.service.PaymentService;
+import org.example.trusttrade.global.domain.order.Order;
+import org.example.trusttrade.global.dto.ConfirmPaymentRequest;
+import org.example.trusttrade.global.dto.OrderPaymentResDto;
+import org.example.trusttrade.global.dto.PaymentErrorResponse;
+import org.example.trusttrade.global.service.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

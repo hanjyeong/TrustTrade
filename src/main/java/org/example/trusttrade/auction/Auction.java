@@ -12,7 +12,7 @@ import org.example.trusttrade.item.domain.products.ProductLocation;
 import org.example.trusttrade.login.domain.User;
 
 import org.example.trusttrade.item.dto.request.AuctionItemDto;
-import org.example.trusttrade.dto.AuctionUpdateDto;
+import org.example.trusttrade.global.dto.AuctionUpdateDto;
 
 import java.time.LocalDateTime;
 import java.util.List;

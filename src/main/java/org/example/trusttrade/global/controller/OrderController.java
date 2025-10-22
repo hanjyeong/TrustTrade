@@ -1,13 +1,16 @@
-package org.example.trusttrade.controller;
+package org.example.trusttrade.global.controller;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.trusttrade.client.TossPaymentClient;
-import org.example.trusttrade.domain.order.Order;
-import org.example.trusttrade.dto.*;
-import org.example.trusttrade.repository.OrderRepository;
-import org.example.trusttrade.service.OrderService;
-import org.example.trusttrade.service.PaymentService;
+import org.example.trusttrade.global.domain.order.Order;
+import org.example.trusttrade.global.dto.OrderCancelDto;
+import org.example.trusttrade.global.dto.OrderPaymentResDto;
+import org.example.trusttrade.global.dto.OrderReqDto;
+import org.example.trusttrade.global.dto.OrderResDto;
+import org.example.trusttrade.global.repository.OrderRepository;
+import org.example.trusttrade.global.service.OrderService;
+import org.example.trusttrade.global.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
