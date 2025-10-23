@@ -7,6 +7,7 @@ import org.example.trusttrade.auction.Auction;
 import org.example.trusttrade.global.dto.AuctionUpdateDto;
 import org.example.trusttrade.item.dto.request.AuctionItemDto;
 import org.example.trusttrade.item.dto.request.CategoryDto;
+import org.example.trusttrade.item.dto.request.SellerAccountDto;
 import org.example.trusttrade.item.dto.response.ItemResponseDto;
 import org.example.trusttrade.item.service.ItemService;
 import org.example.trusttrade.login.domain.User;
@@ -43,11 +44,11 @@ public class AuctionController {
 
     }
 
-    /*//경매 목록 조회
+    //경매 목록 조회
     @GetMapping("/list")
     public ResponseEntity<?> auctions() {
         return ResponseEntity.ok(auctionRepository.findAll());
-    }*/
+    }
 
     //경매 삭제
     @PostMapping("/{auctionId}/delete")
@@ -106,12 +107,12 @@ public class AuctionController {
         }
     }
 
-    // 경매 물품 전체 조회
+    /*// 경매 물품 전체 조회
     @GetMapping("/list")
     public ResponseEntity<List<ItemResponseDto>> getAuctionItems() {
         List<ItemResponseDto> items = auctionService.getAuctionItems();
         return ResponseEntity.ok(items);
-    }
+    }*/
 
     // 카테고리별 조회
     @GetMapping("/category/list")
@@ -121,6 +122,14 @@ public class AuctionController {
     }
 
     // 판매자 이름별 조회
+    @GetMapping("/seller/list")
+    public ResponseEntity<List<ItemResponseDto>> getItemsSellerAccount(
+            @RequestParam String sellerAccount,
+            @RequestParam String itemType) {
+
+        List<ItemResponseDto> items = itemService.findBySellerAccountAndType(sellerAccount, itemType);
+        return ResponseEntity.ok(items);
+    }
 
 
 

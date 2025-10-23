@@ -50,12 +50,7 @@ public class ProductService {
     public List<ItemResponseDto> getBasicItems() {
         List<Product> items = productRepository.findAll();
         return items.stream()
-                .map(item -> new ItemResponseDto(
-                        item.getId(),
-                        item.getName(),
-                        item.getItemType(),
-                        item.getDescription()
-                ))
+                .map(ItemResponseDto::fromProduct)
                 .collect(Collectors.toList());
     }
 

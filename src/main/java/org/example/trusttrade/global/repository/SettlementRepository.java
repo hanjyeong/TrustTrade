@@ -1,0 +1,14 @@
+package org.example.trusttrade.global.repository;
+
+import org.example.trusttrade.global.domain.order.Settlement;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+import java.util.UUID;
+
+
+public interface SettlementRepository extends JpaRepository<Settlement, Long> {
+
+    List<Settlement> findBySellerId(UUID sellerId);
+
+    List<Settlement> findByStatus(Settlement.Status status);
+}

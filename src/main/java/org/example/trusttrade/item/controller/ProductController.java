@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.trusttrade.item.dto.StoredImage;
 import org.example.trusttrade.item.dto.request.CategoryDto;
+import org.example.trusttrade.item.dto.request.SellerAccountDto;
 import org.example.trusttrade.item.service.ProductService;
 import org.example.trusttrade.item.service.ImageService;
 import org.example.trusttrade.login.domain.User;
@@ -63,30 +64,12 @@ public class ProductController {
         }
     }
 
-    // 일반 물품 전체 조회
+    /*// 일반 물품 전체 조회
     @GetMapping("/list")
     public ResponseEntity<List<ItemResponseDto>> getBasicItems() {
         List<ItemResponseDto> items = productService.getBasicItems();
         return ResponseEntity.ok(items);
-    }
-
-    // 카테고리별 조회
-    @GetMapping("/category/list")
-    public ResponseEntity<List<ItemResponseDto>> getItemsCategory(@RequestBody CategoryDto categoryDto) {
-        List<ItemResponseDto> items = itemService.findByCategoryAndType(categoryDto);
-        return ResponseEntity.ok(items);
-    }
-
-
-    // 판매자 이름별 조회
-
-
-
-    // 물품명 조회
-
-
-
-
+    }*/
 
 
 }

@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 import org.example.trusttrade.item.domain.Item;
 import org.example.trusttrade.item.dto.request.BasicItemDto;
 
+import org.example.trusttrade.item.dto.response.ItemResponseDto;
 import org.example.trusttrade.login.domain.User;
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ public class Product extends Item {
     @Column(name = "product_status",nullable = false)
     private ProductStatus status;
 
+    // product 객체 생성
     public static Product fromDto(BasicItemDto dto, User seller) {
 
         // 1) ProductLocation  생성
@@ -47,5 +49,7 @@ public class Product extends Item {
                 .status(ProductStatus.SALE)
                 .build();
     }
+
+
 
 }
