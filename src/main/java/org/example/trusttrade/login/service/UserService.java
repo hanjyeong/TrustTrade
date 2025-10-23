@@ -3,7 +3,12 @@ package org.example.trusttrade.login.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.trusttrade.global.dto.GeoPoint;
+import org.example.trusttrade.global.dto.KakaoApiResponseDto;
 import org.example.trusttrade.global.dto.SignUpRequest;
+import org.example.trusttrade.global.service.KakaoAddressSearchService;
+import org.example.trusttrade.global.service.MapService;
+import org.example.trusttrade.item.domain.products.ProductLocation;
 import org.example.trusttrade.login.dto.LogInRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,8 @@ import org.example.trusttrade.login.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final KakaoAddressSearchService kakaoAddressSearchService;
+    private final MapService mapService;
 
     // user 권한 조회
     public User validateBusinessUser(UUID userId) {
@@ -55,12 +62,23 @@ public class UserService {
 
     }
 
-
+    // 회원가입
     @Transactional
     public void signUp(SignUpRequest request) {
-            User user = User.createUser(request);
-            userRepository.save(user);
-            log.info("회원가입 성공: account = {}", request.getAccount());
+
+        // 사용자 주소 저장
+        GeoPoint geocode = mapService.geocode(request.getRoughAddress());
+
+        ProductLocation loc = ProductLocation.builder()
+                .address(request.getRoughAddress())
+                .latitude(geocode.getLat())
+                .longitude(geocode.getLng())
+                .build();
+
+        // user 객체 생성
+        User user = User.createUser(request,loc);
+        userRepository.save(user);
+        log.info("회원가입 성공: account = {}", request.getAccount());
     }
 
 

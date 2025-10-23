@@ -9,6 +9,7 @@ import lombok.Builder;
 import org.example.trusttrade.global.domain.SellerAccount;
 import org.example.trusttrade.global.domain.order.Settlement;
 import org.example.trusttrade.global.dto.SignUpRequest;
+import org.example.trusttrade.item.domain.products.ProductLocation;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -58,8 +59,10 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "rough_address", nullable = false)
-    private String roughAddress;
+    // 사용자 주소
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_location")
+    private ProductLocation user_location;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private SocialLogin socialLogin;
@@ -71,12 +74,12 @@ public class User {
     private java.util.List<Settlement> settlements;
 
 
-    public static User createUser(SignUpRequest request) {
+    public static User createUser(SignUpRequest request,ProductLocation userLocation) {
         return User.builder()
                 .userAccount(request.getAccount())
                 .userPw(request.getPassword())
                 .email(request.getEmail())
-                .roughAddress(request.getRoughAddress())
+                .user_location(userLocation)
                 .role(Role.USER)
                 .memberType(MemberType.GENERAL)
                 .build();

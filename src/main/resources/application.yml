@@ -45,3 +45,9 @@ logging:
 app:
   upload:
     root: src/main/resources/static/uploads
+
+# 지도 기능
+geocoding:
+  kakao:
+    base-url: https://dapi.kakao.com
+    rest-api-key: ${KAKAO_REST_API_KEY}
