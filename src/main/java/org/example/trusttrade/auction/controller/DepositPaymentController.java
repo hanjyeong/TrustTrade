@@ -1,9 +1,6 @@
 package org.example.trusttrade.auction.controller;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.trusttrade.auction.dto.DepositOrderPaymentResDto;
-import org.example.trusttrade.auction.repository.DepositOrderRepository;
 import org.example.trusttrade.auction.service.DepositOrderService;
 import org.example.trusttrade.order.dto.ConfirmPaymentRequest;
 import org.example.trusttrade.order.dto.PaymentErrorResponse;
@@ -21,26 +18,7 @@ public class DepositPaymentController {
 
     @Autowired
     private final DepositOrderService depositOrderService;
-    @Autowired
-    private final DepositOrderRepository depositOrderRepository;
 
-    //보증금 결제 정보 검증
-    @PostMapping("/verify")
-    public ResponseEntity<?> verify(@RequestBody DepositOrderPaymentResDto depositOrderPaymentResDto) {
-
-        depositOrderRepository.findById(depositOrderPaymentResDto.getDepositOrderId())
-                .orElseThrow(() -> new EntityNotFoundException("Deposit order not found"));
-
-        if (depositOrderPaymentResDto.getAmount() != 20000) {
-            return ResponseEntity.badRequest().body(PaymentErrorResponse.builder()
-                    .code(400)
-                    .message("결제 금액 정보가 일치하지 않습니다.")
-                    .build());
-        } else {
-            return ResponseEntity.ok("결제 정보가 검증되었습니다.");
-        }
-
-    }
 
     //결제 인증 api 호출
     @PostMapping("/confirm")

@@ -37,13 +37,15 @@ public class Bids {
     private LocalDateTime createdTime;
 
     public static Bids create(Auction auction, User user, int bidPrice) {
-        return Bids.builder()
+        Bids bid = Bids.builder()
                 .auction(auction)
                 .user(user)
                 .bidPrice(bidPrice)
                 .build();
+
+        //경매에 입찰자 등록
+        auction.addBid(bid);
+        return bid;
     }
-
-
 
 }

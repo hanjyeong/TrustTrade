@@ -7,12 +7,10 @@ import org.example.trusttrade.notification.service.NotificationService;
 import org.example.trusttrade.order.client.TossPaymentClient;
 import org.example.trusttrade.order.domain.Order;
 import org.example.trusttrade.order.dto.ConfirmPaymentRequest;
-import org.example.trusttrade.order.dto.OrderPaymentResDto;
 import org.example.trusttrade.order.exception.OrderCancellationException;
 import org.example.trusttrade.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
 import java.net.http.HttpResponse;
 
@@ -27,7 +25,7 @@ public class PaymentService {
     private final TossPaymentClient tossPaymentClient;
     private final NotificationService notificationService;
 
-    //결제 정보 검증 > confirm에서 같이 해도 되는거 아닌가
+    //결제 정보 검증
     public Order verifyPayment(ConfirmPaymentRequest request) throws OrderCancellationException {
 
         String orderId = request.getOrderId();
@@ -103,7 +101,7 @@ public class PaymentService {
         }
     }
 
-    //주문 취소 및 상태 변경(환불 시 사용)
+    //주문 취소 및 상태 변경(환불 시 사용) - 보류
     public Order cancelOrder(String orderId, String paymentKey, String reason) throws IOException, InterruptedException {
 
         Order order = orderRepository.findById(orderId)

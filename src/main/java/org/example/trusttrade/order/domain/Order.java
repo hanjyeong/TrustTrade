@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Entity
@@ -55,7 +56,7 @@ public class Order {
     //order 생성
     public static Order create(Product product, User buyer, User seller) {
         Order order = new Order();
-        order.id = "w5w82vdPqT9PNEB3w_8VD"; //토스 api를 통해 orderId 값 수동 설정
+        order.id = "ORD-" + UUID.randomUUID().toString().substring(0, 8);
         order.amount = product.getProductPrice();
         order.productName = product.getName();
         order.product = product;

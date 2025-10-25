@@ -41,10 +41,9 @@ logging:
 
 
 #토스 키
-toss:
-  widget:
-    secret-key: test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6   # 위젯 시크릿 키
-  client:
-    key: test_ck_Poxy1XQL8RJ2D7NADbA487nO5Wml          # 클라이언트 키
+payment:
+  toss:
+    test-client-api-key: test_ck_DnyRpQWGrNaWRw04jOYOVKwv1M9E  # 클라이언트 키
+    test-secret-key: test_sk_DpexMgkW36xjX0oo9QZBrGbR5ozO   # 시크릿 키
 
 

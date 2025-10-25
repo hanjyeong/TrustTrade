@@ -1,12 +1,15 @@
 package org.example.trusttrade.auction.dto;
 
-import lombok.Data;
+import lombok.*;
 import org.example.trusttrade.auction.domain.Bids;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
+@Getter
+@Setter
+@Builder
 public class BidsResponseDto {
     private Long id;
     private UUID bidderId;
@@ -14,12 +17,14 @@ public class BidsResponseDto {
     private LocalDateTime createdTime;
 
     public static BidsResponseDto from(Bids bid) {
-        BidsResponseDto dto = new BidsResponseDto();
-        dto.setId(bid.getId());
-        dto.setBidderId(bid.getUser().getId());
-        dto.setBidPrice(bid.getBidPrice());
-        dto.setCreatedTime(bid.getCreatedTime());
-        return dto;
+
+        return  BidsResponseDto.builder()
+                .id(bid.getId())
+                .bidderId(bid.getUser().getId())
+                .bidPrice(bid.getBidPrice())
+                .createdTime(bid.getCreatedTime())
+                .build();
+
     }
 }
 

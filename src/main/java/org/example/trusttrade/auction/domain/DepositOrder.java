@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.trusttrade.login.domain.User;
-import org.example.trusttrade.order.domain.Order;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public class DepositOrder {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
     @Column(name = "deposit_order_id")
     private String id;
 
@@ -56,7 +56,7 @@ public class DepositOrder {
 
     public static DepositOrder create(Auction auction, User bidder, User seller) {
         DepositOrder depositOrder = new DepositOrder();
-        depositOrder.id = "w5w82vdPqT9PNEB3w_8VD";
+        depositOrder.id = "ORD-" + UUID.randomUUID().toString().substring(0, 8);
         depositOrder.amount = 20000;
         depositOrder.auctionName = auction.getName() + " 보증금 결제";
         depositOrder.auction = auction;
@@ -77,13 +77,6 @@ public class DepositOrder {
             throw new IllegalStateException("PENDING 상태가 아니면 결제 완료 처리할 수 없습니다.");
         }
         this.status = DepositOrder.Status.DEPOSITED;
-    }
-    // 수령 완료 상태로 변경
-    public void refundedDepositOrder() {
-        if (this.status != DepositOrder.Status.DEPOSITED) {
-            throw new IllegalStateException("결제 완료 상태가 아니면 보증금 환불을 진행할 수 없습니다.");
-        }
-        this.status = DepositOrder.Status.REFUNDED;
     }
 
     //결제 취소될 경우 상태

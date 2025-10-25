@@ -2,12 +2,9 @@ package org.example.trusttrade.order.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.example.trusttrade.order.dto.ConfirmPaymentRequest;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -20,7 +17,7 @@ import java.util.Base64;
 public class TossPaymentClient {
 
 
-    @Value("${toss.widget.secret-key}")
+    @Value("${payment.toss.test-secret-key}")
     private String widgetSecretKey;
     private final ObjectMapper jacksonObjectMapper;
 
