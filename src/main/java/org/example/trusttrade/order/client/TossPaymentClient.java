@@ -2,11 +2,9 @@ package org.example.trusttrade.order.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.example.trusttrade.order.dto.ConfirmPaymentRequest;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,10 +17,11 @@ import java.util.Base64;
 public class TossPaymentClient {
 
 
+    @Value("${payment.toss.test-secret-key}")
+    private String widgetSecretKey;
     private final ObjectMapper jacksonObjectMapper;
 
     public TossPaymentClient(ObjectMapper jacksonObjectMapper) {
-
         this.jacksonObjectMapper = jacksonObjectMapper;
     }
 
@@ -39,7 +38,7 @@ public class TossPaymentClient {
                 .put("amount", String.valueOf(amount))
                 .put("paymentKey", tossPaymentKey);
 
-        //JSON 객체 문자열 변환
+        //JSON 객체 문자열 변환, 결제 승인 요청
         try {
             String requestBody = jacksonObjectMapper.writeValueAsString(requestObj);
             System.out.println("Sending request to Toss: " + requestBody);
@@ -62,9 +61,6 @@ public class TossPaymentClient {
     //결제 취소 요청(db 작업 에러시 사용)
     public HttpResponse requestPaymentCancel(String paymentKey, String cancelReason) throws IOException, InterruptedException {
 
-        String json = String.format("{\"cancelReason\": \"%s\"}", cancelReason.replace("\"", "\\\""));
-
-
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel"))
                 .header("Authorization", getAuthorizations())
@@ -75,12 +71,8 @@ public class TossPaymentClient {
         return HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    //@Value("${TOSS_WIDGET_SECRET_KEY}")
-    //private final widgetSecretKey;
-    //테스트용 인증키 생성
+    //테스트용 인증키
     private String getAuthorizations() {
-        String widgetSecretKey = "test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6"; //테스트용 인증키
-        //String widgetSecretKey = "test_sk_zXLkKEypNArWmo50nX3lmeaxYG5R"; //테스트용 인증키
 
         if (widgetSecretKey == null || widgetSecretKey.isBlank()) {
             throw new IllegalStateException("TOSS_WIDGET_SECRET_KEY 설정이 비어있습니다.");

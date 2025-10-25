@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.example.trusttrade.auction.dto.AuctionItemDto;
-import org.example.trusttrade.auction.dto.AuctionUpdateDto;
 import org.example.trusttrade.item.domain.Item;
 import org.example.trusttrade.item.domain.products.ProductLocation;
 import org.example.trusttrade.login.domain.User;
@@ -38,6 +37,10 @@ public class Auction extends Item {
     @OneToMany(mappedBy = "auction")
     private List<Bids> bids;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "winner_id")
+    private User winner;
+
     public static Auction fromDto(AuctionItemDto dto, User seller){
         // 위치 정보 생성/조회
         ProductLocation loc = ProductLocation.fromDto(dto);
@@ -58,23 +61,29 @@ public class Auction extends Item {
                 .build();
     }
 
-    //경매 정보 업데이트
-    public void updateAuction(AuctionUpdateDto auctionUpdateDto){
-        if(this.hasBidder()){
-            throw new IllegalStateException("입찰자가 존재하여 수정이 불가합니다.");
+
+    //경매 종료시, 낙찰자 설정 & 경매 상태 변경
+    public void setWinner(User winner) {
+        if (this.auctionStatus == AuctionStatus.CLOSED) {
+            throw new IllegalStateException("이미 종료된 경매는 낙찰자를 변경할 수 없습니다.");
         }
-        //location 객체 수정 추가 필요
-        updateItem(auctionUpdateDto.getName(), auctionUpdateDto.getDescription());
-
-        this.startPrice = auctionUpdateDto.getStartPrice();
-        this.bidUnit = auctionUpdateDto.getBidUnit();
-        this.endTime = auctionUpdateDto.getEndTime();
-
+        if (winner == null) throw new IllegalArgumentException("낙찰자는 null일 수 없습니다.");
+        this.winner = winner;
     }
 
-    //경매 삭제시, bids 존재 여부 리턴
-    public boolean hasBidder(){
-        return this.bids != null && !this.bids.isEmpty();
+    //경매 상태 변경
+    public void setAuctionStatus(AuctionStatus status) {
+        if (status == null) {
+            throw new IllegalArgumentException("경매 상태는 null일 수 없습니다.");
+        }
+        // 이미 종료된 경매 상태 변경 방지
+        if (this.auctionStatus == AuctionStatus.CLOSED) {
+            throw new IllegalStateException("이미 종료된 경매는 상태를 변경할 수 없습니다.");
+        }
+
+        this.auctionStatus = status;
     }
 
+    //bid 연관관계 설정
+    public void addBid(Bids bid) {bids.add(bid);}
 }

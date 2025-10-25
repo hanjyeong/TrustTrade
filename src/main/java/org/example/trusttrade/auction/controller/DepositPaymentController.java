@@ -1,27 +1,30 @@
-package org.example.trusttrade.order.controller;
+package org.example.trusttrade.auction.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.trusttrade.auction.service.DepositOrderService;
 import org.example.trusttrade.order.dto.ConfirmPaymentRequest;
 import org.example.trusttrade.order.dto.PaymentErrorResponse;
-import org.example.trusttrade.order.service.PaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/payments")
+@RequestMapping("/depositPayments")
 @RequiredArgsConstructor
-public class PaymentController {
+public class DepositPaymentController {
 
-    private final PaymentService paymentService;
+    @Autowired
+    private final DepositOrderService depositOrderService;
 
 
     //결제 인증 api 호출
     @PostMapping("/confirm")
     public ResponseEntity confirm(@RequestBody ConfirmPaymentRequest confirmPaymentRequest) {
         try {
-
-            paymentService.confirmAndSavePayment(confirmPaymentRequest);
-
+            depositOrderService.confirmAndSavePayment(confirmPaymentRequest);
             return ResponseEntity.ok("결제 승인 및 저장 성공");
 
         } catch (Exception e) {
