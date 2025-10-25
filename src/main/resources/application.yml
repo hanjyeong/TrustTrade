@@ -33,6 +33,7 @@ kakao:
     service-key: 2825961cc8fb6c3773683f50fc3b6b7a
 
 
+
 # 로깅 설정
 logging:
   level:
