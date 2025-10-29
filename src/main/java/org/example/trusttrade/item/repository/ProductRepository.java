@@ -14,12 +14,12 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    // 5km 이내의 모든 물품 조회
     @Query("SELECT p FROM Product p WHERE " +
             "(6371 * acos(cos(radians(:lat)) * cos(radians(p.productLocation.latitude)) " +
             "* cos(radians(p.productLocation.longitude) - radians(:lng)) + " +
             "sin(radians(:lat)) * sin(radians(p.productLocation.latitude)))) <= 5")
-    List<Product> findNearby(@Param("lat") double lat,
-                             @Param("lng") double lng);
+    List<Product> findNearby(@Param("lat") double lat, @Param("lng") double lng);
 
     @Query("SELECT a FROM Auction a WHERE a.user.id = :sellerId")
     List<Product> getProductBySellerId(@Param("sellerId") UUID sellerId);

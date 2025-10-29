@@ -55,11 +55,12 @@ public class ProductService {
     }
 
 
+    // 5km 이내의 물품 조회
     public List<ProductResponseDto> findProductsNearby(double lat, double lng) {
         List<Product> products = productRepository.findNearby(lat, lng);
         return products.stream()
                 .map(product -> ProductResponseDto.builder()
-                        .id(product.getId())
+                        .item_id(product.getId())
                         .sellerAccount(product.getUser().getUserAccount()) // 판매자명 대신 계정 사용
                         .title(product.getName())
                         .price(product.getProductPrice())

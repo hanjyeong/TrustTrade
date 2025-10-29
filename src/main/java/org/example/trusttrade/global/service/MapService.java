@@ -13,7 +13,7 @@ public class MapService {
     private final KakaoAddressSearchService kakaoAddressSearchService;
 
     // 주소를 위도,경도 값으로 변환하는 메서드
-    public GeoPoint geocode(String address){
+    public GeoPoint addressToGeocode(String address){
 
         KakaoApiResponseDto kakao = kakaoAddressSearchService.requestAddressSearch(address);
         DocumentDto doc = kakao.getDocumentList().getFirst();

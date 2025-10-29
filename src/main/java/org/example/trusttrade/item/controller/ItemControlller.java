@@ -25,7 +25,6 @@ public class ItemControlller { // 일반 물품, 경매 물품 공통 기능 처
         return ResponseEntity.ok(items);
     }
 
-
     // 판매자 이름별(아이디) 조회
     @GetMapping("/seller/list")
     public ResponseEntity<List<ItemResponseDto>> getItemsBySellerAccount(@RequestParam String sellerAccount, @RequestParam String itemType) {

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ProductResponseDto {
-    private Long id;            // 상품 ID
+    private Long item_id;            // 상품 ID
     private String sellerAccount; // 판매자 이름
     private String title;       // 상품 이름
     private int price;          // 가격

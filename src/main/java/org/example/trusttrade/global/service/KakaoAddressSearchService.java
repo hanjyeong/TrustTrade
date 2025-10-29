@@ -24,6 +24,7 @@ public class KakaoAddressSearchService {
     @Value("${geocoding.kakao.rest-api-key}")
     private String kakaoRestApiKey;
 
+    // kakaoAPI에 생성된 URI HTTP로 호출하기
     public KakaoApiResponseDto requestAddressSearch(String address) {
 
         if(ObjectUtils.isEmpty(address)) return null;
