@@ -8,10 +8,14 @@ import org.example.trusttrade.auction.domain.AuctionStatus;
 import org.example.trusttrade.auction.dto.AuctionItemDto;
 import org.example.trusttrade.auction.repository.AuctionRepository;
 import org.example.trusttrade.auction.repository.BidRepository;
+import org.example.trusttrade.item.dto.StoredImage;
+import org.example.trusttrade.item.service.ImageService;
 import org.example.trusttrade.login.domain.User;
-import org.example.trusttrade.item.service.ItemService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,23 +25,29 @@ import java.util.UUID;
 public class AuctionService {
 
     private final AuctionRepository auctionRepository;
-    private final ItemService itemService;
     private final BidRepository bidRepository;
+    private final ImageService imageService;
 
+    // 경매 물품 등록
     @Transactional
-    public Auction registerAuction(AuctionItemDto dto, User seller) {
-        // 1) Auction 객체 생성
-        Auction auction = Auction.fromDto(dto, seller);
-        log.debug("Auction 객체 생성 완료: {}", auction);
-        auctionRepository.save(auction);
-        log.debug("Auction 저장 완료: auctionId={}", auction.getId());
+    public void registerAuctionItem(AuctionItemDto auctionItemDto, User seller, List<MultipartFile> images) {
+        List<StoredImage> storedImages = Collections.emptyList();
+        try {
 
-        // 2) 이미지·카테고리 저장
-        itemService.saveItemDetails(auction, dto.getImages(), dto.getCategoryIds());
-        log.debug("이미지·카테고리 저장 완료: auctionId={}", auction.getId());
+            // 이미지 변환
+            storedImages = imageService.processImagesAndSetDto(images, auctionItemDto);
 
-        return auction;
+            // Auction 객체 생성
+            Auction auction = Auction.fromDto(auctionItemDto, seller);
+            auctionRepository.save(auction);
+
+        } catch (Exception e) {
+            imageService.deleteFiles(storedImages);
+            throw new RuntimeException("경매 물품 등록 중 오류 발생", e);
+        }
+
     }
+
 
     //경매 조죄 by sellerId
     @Transactional
