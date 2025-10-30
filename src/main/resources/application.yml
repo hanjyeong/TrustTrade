@@ -47,4 +47,13 @@ payment:
     test-client-api-key: test_ck_DnyRpQWGrNaWRw04jOYOVKwv1M9E  # 클라이언트 키
     test-secret-key: test_sk_DpexMgkW36xjX0oo9QZBrGbR5ozO   # 시크릿 키
 
+# 로컬 사진 저장
+app:
+  upload:
+    root: src/main/resources/static/uploads
 
+# 지도 기능
+geocoding:
+  kakao:
+    base-url: https://dapi.kakao.com
+    rest-api-key: ${KAKAO_REST_API_KEY}

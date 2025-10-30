@@ -18,5 +18,11 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     //마감되지 않은 경매 중 현재시간이 end 시간을 지난 경매 조회
     List<Auction> findByEndTimeBeforeAndAuctionStatus(LocalDateTime now, AuctionStatus status);
 
-
+    @Query("""
+        select a
+        from Auction a
+        join fetch a.user u
+        where lower(a.name) like lower(concat('%', :title, '%'))
+    """)
+    List<Auction> findByTitleContainingWithSeller(@Param("title") String title);
 }
