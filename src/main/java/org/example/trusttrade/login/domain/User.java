@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import org.example.trusttrade.global.domain.SellerAccount;
-import org.example.trusttrade.global.domain.order.Settlement;
-import org.example.trusttrade.global.dto.SignUpRequest;
-import org.example.trusttrade.item.domain.products.ProductLocation;
+import org.example.trusttrade.global.domain.Settlement;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -26,12 +24,6 @@ public class User {
     @Id
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID id;
-
-    @Column(name="userAccount",unique = true)
-    private String userAccount;
-
-    @Column(name = "userPw")
-    private String userPw;
 
     @Column(name = "email")
     private String email;
@@ -59,10 +51,8 @@ public class User {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    // 사용자 주소
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_location")
-    private ProductLocation user_location;
+    @Column(name = "rough_address", nullable = false)
+    private String roughAddress;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private SocialLogin socialLogin;
@@ -72,20 +62,6 @@ public class User {
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private java.util.List<Settlement> settlements;
-
-
-    public static User createUser(SignUpRequest request,ProductLocation userLocation) {
-        return User.builder()
-                .userAccount(request.getAccount())
-                .userPw(request.getPassword())
-                .email(request.getEmail())
-                .user_location(userLocation)
-                .role(Role.USER)
-                .memberType(MemberType.GENERAL)
-                .build();
-    }
-
-
 
     @PrePersist
     public void prePersist() {

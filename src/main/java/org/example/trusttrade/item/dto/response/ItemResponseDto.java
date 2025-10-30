@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.trusttrade.auction.Auction;
+import org.example.trusttrade.auction.domain.Auction;
 import org.example.trusttrade.item.domain.products.Product;
 
 @Getter
@@ -41,6 +41,5 @@ public class ItemResponseDto {
                 .itemType("AUCTION")
                 .build();
     }
-
 
 }

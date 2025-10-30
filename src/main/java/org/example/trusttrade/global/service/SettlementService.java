@@ -1,7 +1,7 @@
 package org.example.trusttrade.global.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.trusttrade.global.domain.order.Settlement;
+import org.example.trusttrade.global.domain.Settlement;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

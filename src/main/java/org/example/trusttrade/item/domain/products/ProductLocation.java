@@ -2,7 +2,7 @@ package org.example.trusttrade.item.domain.products;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.trusttrade.item.dto.request.AuctionItemDto;
+import org.example.trusttrade.auction.dto.AuctionItemDto;
 import org.example.trusttrade.item.dto.request.BasicItemDto;
 
 @Entity

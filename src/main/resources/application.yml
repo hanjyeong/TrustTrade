@@ -9,10 +9,13 @@ spring:
     username: user
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+    redis:
+      host: localhost
+      port: 6379
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -25,6 +28,7 @@ redis:
   port: 6379
 
 
+
 nts:
   api:
     url: https://api.odcloud.kr/api/nts-businessman/v1/validate
@@ -33,6 +37,7 @@ nts:
 kakao:
   api:
     service-key: 2825961cc8fb6c3773683f50fc3b6b7a
+
 
 
 # 로깅 설정
@@ -51,3 +56,13 @@ geocoding:
   kakao:
     base-url: https://dapi.kakao.com
     rest-api-key: ${KAKAO_REST_API_KEY}
+
+
+
+#토스 키
+payment:
+  toss:
+    test-client-api-key: test_ck_DnyRpQWGrNaWRw04jOYOVKwv1M9E  # 클라이언트 키
+    test-secret-key: test_sk_DpexMgkW36xjX0oo9QZBrGbR5ozO   # 시크릿 키
+
+
