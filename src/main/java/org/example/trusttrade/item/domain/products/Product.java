@@ -35,7 +35,7 @@ public class Product extends Item {
         return Product.builder()
                 // Item 필드
                 .user(seller)
-                .name(dto.getName())
+                .name(dto.getTitle())
                 .description(dto.getDescription())
                 .productLocation(loc)
                 .createdTime(LocalDateTime.now())

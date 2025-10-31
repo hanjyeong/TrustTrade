@@ -48,7 +48,7 @@ public class Item {
     public static Item fromDto(BasicItemDto dto,User seller,ProductLocation productLocation){
         return Item.builder()
                 .user(seller)
-                .name(dto.getName())
+                .name(dto.getTitle())
                 .description(dto.getDescription())
                 .productLocation(productLocation)
                 .createdTime(LocalDateTime.now())
