@@ -93,7 +93,6 @@ public class AuctionController {
             @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         try {
-
             // 판매자 권한 검증
             User seller = userService.validateBusinessUser(auctionItemDto.getSellerId());
 
