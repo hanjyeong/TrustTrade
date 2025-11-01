@@ -1,5 +1,6 @@
 package org.example.trusttrade.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.trusttrade.item.dto.response.KakaoApiResponseDto;
@@ -20,6 +21,7 @@ public class KakaoAddressSearchService {
 
     private final RestTemplate restTemplate;
     private final KakaoUriBuilderService kakaoUriBuilderService;
+
 
     @Value("${geocoding.kakao.rest-api-key}")
     private String kakaoRestApiKey;
