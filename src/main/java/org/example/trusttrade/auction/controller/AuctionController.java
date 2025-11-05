@@ -110,13 +110,6 @@ public class AuctionController {
         }
     }
 
-    /*// 경매 물품 전체 조회
-    @GetMapping("/list")
-    public ResponseEntity<List<ItemResponseDto>> getAuctionItems() {
-        List<ItemResponseDto> items = auctionService.getAuctionItems();
-        return ResponseEntity.ok(items);
-    }*/
-
     // 카테고리별 조회
     @GetMapping("/category/list")
     public ResponseEntity<List<ItemResponseDto>> getItemsCategory(@RequestBody CategoryDto categoryDto) {
@@ -133,8 +126,4 @@ public class AuctionController {
         List<ItemResponseDto> items = itemService.findBySellerAccountAndType(sellerAccount, itemType);
         return ResponseEntity.ok(items);
     }
-
-
-
-
 }

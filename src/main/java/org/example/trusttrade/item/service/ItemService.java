@@ -14,6 +14,8 @@ import org.example.trusttrade.item.repository.*;
 import org.example.trusttrade.item.dto.response.ItemResponseDto;
 import org.example.trusttrade.login.domain.User;
 import org.example.trusttrade.login.repository.UserRepository;
+import org.hibernate.Hibernate;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -25,26 +27,25 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     private final ItemImageRepository itemImageRepository;
-    private final CategoryRepository categoryRepository;
     private final ItemCategoryRepository itemCategoryRepository;
-    private final ItemRepository itemRepository;
     private final CategoryService categoryService;
     private final ProductRepository productRepository;
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
 
-    // 카테고리별 상품 조회
     public List<ItemResponseDto> findByCategoryAndType(CategoryDto categoryDto) {
-
         List<ItemCategory> itemCategories = itemCategoryRepository.findByCategory_Id(categoryDto.getCategoryId());
 
         return itemCategories.stream()
                 .map(ItemCategory::getItem) // 부모 Item
-                .filter(item -> item.getItemType() != null  && item.getItemType().equalsIgnoreCase(categoryDto.getItemType()))
+                .filter(item -> item.getItemType() != null && item.getItemType().equalsIgnoreCase(categoryDto.getItemType()))
                 .map(item -> {
-                    if (item instanceof Product p) return ItemResponseDto.fromProduct(p);
-                    if (item instanceof Auction a) return ItemResponseDto.fromAuction(a);
-                    throw new IllegalStateException("지원하지 않는 아이템 타입: " + item.getClass().getSimpleName());
+                    Object unproxied = (item instanceof HibernateProxy) ? ((HibernateProxy) item).getHibernateLazyInitializer().getImplementation() : item;
+
+                    if (unproxied instanceof Product p) return ItemResponseDto.fromProduct(p);
+                    if (unproxied instanceof Auction a) return ItemResponseDto.fromAuction(a);
+
+                    throw new IllegalStateException("지원하지 않는 아이템 타입: " + Hibernate.getClass(item).getSimpleName());
                 })
                 .toList();
     }

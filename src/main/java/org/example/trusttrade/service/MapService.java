@@ -24,4 +24,6 @@ public class MapService {
 
         return new GeoPoint(lat, lng);
     }
+
+
 }

@@ -42,7 +42,7 @@ public class KakaoLoginService {
                     .profileImage(userInfo.getProfileImageUrl())
                     .role(User.Role.USER)
                     .memberType(User.MemberType.GENERAL)
-                    .roughAddress("")
+//                    .roughAddress("")
                     .isDeleted(false)
                     .createdAt(LocalDateTime.now())
                     .build();

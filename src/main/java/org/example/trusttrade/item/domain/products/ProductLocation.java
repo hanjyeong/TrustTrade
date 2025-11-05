@@ -26,7 +26,6 @@ public class ProductLocation {
     @Column(length = 100,nullable = false)
     private String address;
 
-
     public static ProductLocation fromDto(BasicItemDto dto) {
         return ProductLocation.builder()
                 .latitude(dto.getLatitude())
