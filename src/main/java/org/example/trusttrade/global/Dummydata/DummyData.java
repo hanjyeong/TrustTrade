@@ -43,7 +43,6 @@ public class DummyData {
         createDummyProducts();
         createDummyAuctions();
     }
-
     private void createDummyUser() {
         User dummyUser = User.builder()
                 .id(UUID.fromString("ffd9c396-b70e-4d59-8d04-fad7b1fa1df2"))
