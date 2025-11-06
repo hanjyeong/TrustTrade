@@ -2,6 +2,8 @@ package org.example.trusttrade.login.dto;
 
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Builder
@@ -10,6 +12,7 @@ import lombok.*;
 public class LoginResponse {
     private String accessToken;
     private String refreshToken;
+    private UUID id;
     private String email;
     private String nickname;
     private String profileImageUrl;

@@ -62,6 +62,7 @@ public class KakaoLoginService {
         return LoginResponse.builder()
                 .accessToken(jwtAccessToken)
                 .refreshToken(jwtRefreshToken)
+                .id(user.getId())
                 .email(user.getEmail())
                 .profileImageUrl(userInfo.getProfileImageUrl())
                 .isRegistered(isRegistered)
