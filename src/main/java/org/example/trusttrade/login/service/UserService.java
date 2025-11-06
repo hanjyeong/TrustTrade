@@ -65,7 +65,7 @@ public class UserService {
     }
 
     @Transactional
-    public void signUp(SignUpRequest request) {
+    public User signUp(SignUpRequest request) {
 
         ProductLocation loc = null;
 
@@ -84,9 +84,9 @@ public class UserService {
             log.warn("주소 좌표 변환 실패. address={}", request.getRoughAddress());
         }
 
-        User user = User.createUser(request, loc);  // loc가 null일 수도 있음
-        userRepository.save(user);
-        log.info("회원가입 성공: account = {}", request.getAccount());
+        User user = User.createUser(request, loc);
+        user.setId(UUID.randomUUID());
+        return userRepository.save(user);
     }
 
 
