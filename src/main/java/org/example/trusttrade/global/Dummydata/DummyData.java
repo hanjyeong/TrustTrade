@@ -43,10 +43,12 @@ public class DummyData {
         createDummyProducts();
         createDummyAuctions();
     }
+
     private void createDummyUser() {
         User dummyUser = User.builder()
                 .id(UUID.fromString("ffd9c396-b70e-4d59-8d04-fad7b1fa1df2"))
                 .email("dummyuser@example.com")
+                .userAccount("dummyuser")
                 .profileImage("https://example.com/image.png")
                 .role(User.Role.USER)
                 .memberType(User.MemberType.GENERAL)
@@ -62,6 +64,7 @@ public class DummyData {
                 .id(UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890"))
                 .email("businessuser@example.com")
                 .profileImage("https://example.com/business.png")
+                .userAccount("businessuser")
                 .role(User.Role.USER)
                 .memberType(User.MemberType.BUSINESS)
                 .roughAddress("서울특별시 서초구")
@@ -72,10 +75,10 @@ public class DummyData {
     }
 
     private void createDummyCategories() {
-        Category category1 = Category.builder().categoryName("전자제품").build();
-        Category category2 = Category.builder().categoryName("가구").build();
-        Category category3 = Category.builder().categoryName("의류").build();
-        Category category4 = Category.builder().categoryName("기타").build();
+        Category category1 = Category.builder().categoryName("전자제품").build(); // id=1
+        Category category2 = Category.builder().categoryName("가구").build();     // id=2
+        Category category3 = Category.builder().categoryName("의류").build();     // id=3
+        Category category4 = Category.builder().categoryName("기타").build();     // id=4
         categoryRepository.save(category1);
         categoryRepository.save(category2);
         categoryRepository.save(category3);
@@ -83,13 +86,22 @@ public class DummyData {
     }
 
     private void createDummyProducts() {
-        User user = userRepository.findById(
+        // 일반 유저
+        User generalUser = userRepository.findById(
                 UUID.fromString("ffd9c396-b70e-4d59-8d04-fad7b1fa1df2")
         ).orElseThrow();
+
+        // 비즈니스 유저
+        User businessUser = userRepository.findById(
+                UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890")
+        ).orElseThrow();
+
         Category cat1 = categoryRepository.findById(1).orElseThrow();
         Category cat2 = categoryRepository.findById(2).orElseThrow();
 
-        // 3개의 서로 다른 ProductLocation 생성
+        // =========================
+        // (A) 일반 유저가 올린 상품 3개
+        // =========================
         List<ProductLocation> locations = new ArrayList<>();
         locations.add(ProductLocation.builder()
                 .address("서울특별시 강남구 예시동 1")
@@ -107,11 +119,10 @@ public class DummyData {
                 .longitude(127.0290)
                 .build());
 
-        // 각 Product 생성 시 순차적으로 다른 location 적용
         for (int i = 1; i <= 3; i++) {
             ProductLocation loc = locations.get(i - 1);
             Product product = Product.builder()
-                    .user(user)
+                    .user(generalUser)
                     .name("일반 상품 " + i)
                     .description("일반 사용자가 등록한 상품 " + i)
                     .productLocation(loc)
@@ -141,8 +152,44 @@ public class DummyData {
             );
             itemCategoryRepository.saveAll(mappings);
         }
-    }
 
+        // =========================
+        // (B) 비즈니스 유저가 올린 상품 2개
+        // =========================
+        for (int i = 1; i <= 2; i++) {
+            Product businessProduct = Product.builder()
+                    .user(businessUser)  // ← 이게 포인트
+                    .name("비즈니스 상품 " + i)
+                    .description("businessuser가 등록한 일반 상품 " + i)
+                    .productLocation(ProductLocation.builder()
+                            .address("서울특별시 서초구 상점 " + i)
+                            .latitude(37.4840 + (i * 0.001))
+                            .longitude(127.0330 + (i * 0.001))
+                            .build())
+                    .createdTime(LocalDateTime.now())
+                    .productPrice(50000 + (i * 10000))
+                    .status(ProductStatus.SALE)
+                    .build();
+            productRepository.save(businessProduct);
+
+            itemImageRepository.saveAll(List.of(
+                    ItemImage.builder()
+                            .item(businessProduct)
+                            .image("https://example.com/biz-prod-" + i + "-1.jpg")
+                            .savedTime(LocalDateTime.now())
+                            .build(),
+                    ItemImage.builder()
+                            .item(businessProduct)
+                            .image("https://example.com/biz-prod-" + i + "-2.jpg")
+                            .savedTime(LocalDateTime.now())
+                            .build()
+            ));
+
+            itemCategoryRepository.saveAll(List.of(
+                    ItemCategory.builder().item(businessProduct).category(cat1).build()
+            ));
+        }
+    }
 
     private void createDummyAuctions() {
         User business = userRepository.findById(

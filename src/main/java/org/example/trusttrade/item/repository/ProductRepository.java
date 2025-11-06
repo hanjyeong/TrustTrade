@@ -29,6 +29,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         where lower(p.name) like lower(concat('%', :title, '%'))
     """)
     List<Product> findByTitleContainingWithSeller(@Param("title") String title);
+
+
+    // 판매자(UUID)로 이 사람이 올린 상품만
+    List<Product> findByUser_Id(UUID sellerId);
+
+
 }
 
 

@@ -25,4 +25,9 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
         where lower(a.name) like lower(concat('%', :title, '%'))
     """)
     List<Auction> findByTitleContainingWithSeller(@Param("title") String title);
+
+    // 판매자(UUID)로 이 사람이 올린 경매만
+    List<Auction> findByUser_Id(UUID sellerId);
+
+
 }

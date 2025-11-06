@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.trusttrade.auction.domain.Auction;
 import org.example.trusttrade.auction.repository.AuctionRepository;
+import org.example.trusttrade.global.error.NotAllowUserType;
 import org.example.trusttrade.item.domain.Category;
 import org.example.trusttrade.item.domain.Item;
 import org.example.trusttrade.item.domain.ItemCategory;
@@ -33,6 +34,7 @@ public class ItemService {
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
 
+    // 카테고리로 물품 조회
     public List<ItemResponseDto> findByCategoryAndType(CategoryDto categoryDto) {
         List<ItemCategory> itemCategories = itemCategoryRepository.findByCategory_Id(categoryDto.getCategoryId());
 
@@ -98,21 +100,29 @@ public class ItemService {
         User seller = userRepository.findByUserAccount(sellerAccount)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 판매자 계정입니다."));
 
-        // 일반 물품, 경매 물품 분리하여 상품 조회
-        if ("PRODUCT".equalsIgnoreCase(itemType)) { // 일반 물품 조회
-            return productRepository.getProductBySellerId(seller.getId())
+        // 사용자 조건 조회
+        if (seller.getMemberType() != User.MemberType.BUSINESS) {
+            throw new NotAllowUserType("일반 회원은 물건을 등록 할 수 없습니다");
+        }
+
+        // 타입에 따라 분리 조회
+        if ("PRODUCT".equalsIgnoreCase(itemType)) {          // 일반 물품 조회
+            return productRepository.findByUser_Id(seller.getId())
                     .stream()
                     .map(ItemResponseDto::fromProduct)
                     .toList();
-        } else if ("AUCTION".equalsIgnoreCase(itemType)) { // 경매 물품 조회
-            return auctionRepository.getAuctionsBySellerId(seller.getId())
+
+        } else if ("AUCTION".equalsIgnoreCase(itemType)) {   // 경매 물품 조회
+            return auctionRepository.findByUser_Id(seller.getId())
                     .stream()
                     .map(ItemResponseDto::fromAuction)
                     .toList();
+
         } else {
             throw new IllegalArgumentException("유효하지 않은 아이템 타입입니다: " + itemType);
         }
     }
+
 
     // 물품 이름으로 상품 조회
     @Transactional(readOnly = true)

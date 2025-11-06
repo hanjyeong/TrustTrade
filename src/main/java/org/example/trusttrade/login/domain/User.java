@@ -89,7 +89,6 @@ public class User {
                 .build();
     }
 
-
     @PrePersist
     public void prePersist() {
         if (this.id == null) {
@@ -102,7 +101,6 @@ public class User {
             this.isDeleted = false;
         }
     }
-
     public enum Role {
         USER, ADMIN
     }
