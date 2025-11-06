@@ -15,7 +15,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -37,8 +37,8 @@ kakao:
 # 로깅 설정
 logging:
   level:
-    org.hibernate.tool.schema.internal.SchemaDropperImpl: debug
-    org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator: debug
+    org.hibernate.tool.schema.internal.SchemaDropperImpl: TRACE
+    org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator: TRACE
 
 
 #토스 키
