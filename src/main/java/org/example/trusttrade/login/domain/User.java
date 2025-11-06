@@ -28,7 +28,7 @@ public class User {
     @Column(name = "id", nullable = false, columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(name="userAccount",unique = true)
+    @Column(name="user_account",unique = true)
     private String userAccount;
 
     @Column(name = "userPw")
@@ -82,12 +82,12 @@ public class User {
                 .userAccount(request.getAccount())
                 .userPw(request.getPassword())
                 .email(request.getEmail())
+                .roughAddress(request.getRoughAddress())
                 .user_location(userLocation)
                 .role(Role.USER)
                 .memberType(MemberType.GENERAL)
                 .build();
     }
-
 
 
     @PrePersist
@@ -110,4 +110,5 @@ public class User {
     public enum MemberType {
         GENERAL, BUSINESS
     }
+
 }
