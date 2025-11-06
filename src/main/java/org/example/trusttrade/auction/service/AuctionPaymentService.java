@@ -38,7 +38,7 @@ public class AuctionPaymentService {
     }
 
     //결제 정보 인증 api 호출
-    public void confirmAndSavePayment(ConfirmPaymentRequest request) throws IOException, InterruptedException {
+    public boolean confirmAndSavePayment(ConfirmPaymentRequest request) throws IOException, InterruptedException {
 
         //요청과 승인 사이 결제 금액 무결성 검증
         AuctionOrder auctionOrder = verifyPayment(request);
@@ -58,6 +58,7 @@ public class AuctionPaymentService {
                         "결제가 완료되었습니다. 배송을 시작해주세요.", auctionOrder.getSeller().getId());
                 notificationService.createNotification(
                         "결제가 완료되었습니다.", auctionOrder.getBuyer().getId());
+                return true;
 
             } catch (Exception e) {
                 //주문 취소
