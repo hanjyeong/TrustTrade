@@ -78,7 +78,7 @@ public class DepositOrderService {
     }
 
     //결제 정보 인증 api 호출
-    public void confirmAndSavePayment(ConfirmPaymentRequest request) throws IOException, InterruptedException {
+    public boolean confirmAndSavePayment(ConfirmPaymentRequest request) throws IOException, InterruptedException {
 
         //요청과 승인 사이 결제 금액 무결성 검증
         DepositOrder order = verifyPaymentDeposit(request);
@@ -96,6 +96,7 @@ public class DepositOrderService {
                 //알림 처리
                 notificationService.createNotification(
                         order.getAuctionName() + " 보증금 결제가 완료되었습니다.", order.getBidder().getId());
+                return true;
 
             } catch (Exception e) {
                 //주문 취소
