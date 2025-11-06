@@ -26,8 +26,6 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
-    // 카테고리 조회
-
 
 
 }

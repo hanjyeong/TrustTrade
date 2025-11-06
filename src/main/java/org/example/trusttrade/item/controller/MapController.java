@@ -28,13 +28,4 @@ public class MapController {
         List<ProductResponseDto> products = productService.findProductsNearby(geocode.getLat(), geocode.getLng());
         return ResponseEntity.ok(products);
     }
-
-   /* // 물품 상세 조회
-    @GetMapping("/{itemId}")
-    public ResponseEntity<ProductDetailDto> getProductDetail(@PathVariable Long itemId) {
-        return ResponseEntity.ok(productService.getProductDetail(itemId));
-    }*/
-
-
-
 }

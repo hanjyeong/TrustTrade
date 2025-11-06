@@ -3,6 +3,16 @@ package org.example.trusttrade.login.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.trusttrade.global.error.AddressNotFoundException;
+import org.example.trusttrade.item.domain.products.Product;
+import org.example.trusttrade.item.domain.products.ProductLocation;
+import org.example.trusttrade.item.dto.request.GeoPoint;
+import org.example.trusttrade.item.dto.request.LogInRequest;
+import org.example.trusttrade.item.repository.ProductLocationRepository;
+import org.example.trusttrade.login.dto.SignUpRequest;
+import org.example.trusttrade.service.KakaoAddressSearchService;
+import org.example.trusttrade.service.MapService;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,7 +29,9 @@ import org.example.trusttrade.login.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
-
+    private final KakaoAddressSearchService kakaoAddressSearchService;
+    private final MapService mapService;
+    private final ProductLocationRepository productLocationRepository;
     // user 권한 조회
     public User validateBusinessUser(UUID userId) {
         log.debug("validateBusinessUser 시작: userId={}", userId);
@@ -40,6 +52,60 @@ public class UserService {
         log.debug("권한 검증 통과: userId={} is BUSINESS", userId);
         return user;
     }
+
+    // 아이디 중복 체크
+    public void verifyAccountDuplicate(String account) {
+
+        log.debug("계정 중복 체크 요청 시작 account = {}", account);
+        if (userRepository.findByUserAccount(account).isPresent()) {
+            throw new DataIntegrityViolationException("이미 존재하는 계정입니다: " + account);
+        }
+        log.debug("계정 중복 체크 완료. account = {}", account);
+
+    }
+
+    @Transactional
+    public void signUp(SignUpRequest request) {
+
+        ProductLocation loc = null;
+
+        try {
+            GeoPoint geocode = mapService.addressToGeocode(request.getRoughAddress());
+
+            loc = ProductLocation.builder()
+                    .address(request.getRoughAddress())
+                    .latitude(geocode.getLat())
+                    .longitude(geocode.getLng())
+                    .build();
+
+            productLocationRepository.save(loc);
+        } catch (AddressNotFoundException e) { // 주소를 못 찾은 경우
+            // 주소 변환만 실패했을 뿐이므로 가입은 진행
+            log.warn("주소 좌표 변환 실패. address={}", request.getRoughAddress());
+        }
+
+        User user = User.createUser(request, loc);  // loc가 null일 수도 있음
+        userRepository.save(user);
+        log.info("회원가입 성공: account = {}", request.getAccount());
+    }
+
+
+
+
+    // 로그인
+    public void userLogin(LogInRequest request) {
+
+        // 아이디 존재 여부 확인
+        User user = userRepository.findByUserAccount(request.getAccount())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        // 아이디 또는 비밀번호가 일치하지 않는 경우
+        if (!user.getUserPw().equals(request.getPassword()) || !user.getUserAccount().equals(request.getAccount())) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
 
     public Optional<User> findById(UUID id) {
         return userRepository.findById(id);
