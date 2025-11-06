@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class DepositOrderPaymentResDto {
 
-    private String depositOrderId;
+    private String orderId;
     private int amount;
     private String productName;
 }
