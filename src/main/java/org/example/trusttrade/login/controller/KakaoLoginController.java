@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/auth")
@@ -30,7 +32,7 @@ public class KakaoLoginController {
                 .queryParam("refreshToken", response.getRefreshToken())
                 .queryParam("email", response.getEmail())
                 .queryParam("nickname", response.getNickname())
-                .queryParam("profileImageUrl", response.getProfileImageUrl())
+                .queryParam("profileImageUrl", URLEncoder.encode(response.getProfileImageUrl(), StandardCharsets.UTF_8))
                 .queryParam("registered", response.isRegistered())
                 .build(true)
                 .toUri();
