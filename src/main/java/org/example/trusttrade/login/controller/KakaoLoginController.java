@@ -20,7 +20,7 @@ public class KakaoLoginController {
     private final KakaoLoginService kakaoLoginService;
 
     @GetMapping("/kakao/login")
-    public ResponseEntity<LoginResponse> kakaoLogin(@RequestParam("code") String code) throws JSONException {
+    public ResponseEntity<Void> kakaoLogin(@RequestParam("code") String code) throws JSONException {
         String redirectUri = "http://54.66.146.131:8080/auth/kakao/login";
         LoginResponse response = kakaoLoginService.kakaoLogin(code, redirectUri);
 
