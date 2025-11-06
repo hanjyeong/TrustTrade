@@ -56,4 +56,4 @@ app:
 geocoding:
   kakao:
     base-url: https://dapi.kakao.com
-    rest-api-key: ${KAKAO_REST_API_KEY}
+    rest-api-key: 29ae84d21a6931b8b760577787ea66aa

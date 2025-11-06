@@ -20,7 +20,7 @@ public class DepositOrder {
     @Column(name = "deposit_order_id")
     private String id;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_id", nullable = false)
     private Auction auction;
 
