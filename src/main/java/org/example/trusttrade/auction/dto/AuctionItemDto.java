@@ -21,6 +21,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuctionItemDto extends AbstractItemImageDto {
+
+    private Long id; //
     @NotNull
     private String name;
 
@@ -52,11 +54,11 @@ public class AuctionItemDto extends AbstractItemImageDto {
     @Future(message = "종료 시간은 현재 이후여야 합니다.")
     private LocalDateTime endTime;
 
-    // ★ 조회용 변환 메서드 추가
     public static AuctionItemDto fromEntity(Auction auction) {
         ProductLocation loc = auction.getProductLocation();
 
         return new AuctionItemDto(
+                auction.getId(),
                 auction.getName(),
                 auction.getDescription(),
                 auction.getUser().getId(),
