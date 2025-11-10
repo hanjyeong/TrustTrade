@@ -49,13 +49,13 @@ public class AuctionController {
 
     }
 
-    //경매 목록 조회
+    // 경매 목록 조회
     @GetMapping("/list")
-    public ResponseEntity<?> auctions() {
-
+    public ResponseEntity<List<AuctionItemDto>> auctions() {
         List<Auction> auctions = auctionService.getAuctions();
-        List<AuctionResDto> response = auctions.stream()
-                .map(AuctionResDto::fromEntity)
+
+        List<AuctionItemDto> response = auctions.stream()
+                .map(AuctionItemDto::fromEntity)
                 .toList();
 
         return ResponseEntity.ok(response);
