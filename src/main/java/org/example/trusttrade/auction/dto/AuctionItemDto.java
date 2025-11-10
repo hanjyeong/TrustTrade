@@ -21,6 +21,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuctionItemDto extends AbstractItemImageDto {
+
+    private Long id; //
     @NotNull
     private String name;
 
@@ -56,6 +58,7 @@ public class AuctionItemDto extends AbstractItemImageDto {
         ProductLocation loc = auction.getProductLocation();
 
         return new AuctionItemDto(
+                auction.getId(),
                 auction.getName(),
                 auction.getDescription(),
                 auction.getUser().getId(),
