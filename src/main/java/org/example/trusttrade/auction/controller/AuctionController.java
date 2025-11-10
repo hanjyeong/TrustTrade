@@ -49,7 +49,6 @@ public class AuctionController {
 
     }
 
-    // 경매 목록 조회
     @GetMapping("/list")
     public ResponseEntity<List<AuctionItemDto>> auctions() {
         List<Auction> auctions = auctionService.getAuctions();
