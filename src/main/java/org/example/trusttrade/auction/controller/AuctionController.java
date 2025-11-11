@@ -36,6 +36,14 @@ public class AuctionController {
     private final ItemService itemService;
     private final UserService userService;
 
+    //임시 경매 등록
+    @PostMapping("/new")
+    public ResponseEntity<?> createAuction(@RequestBody AuctionItemDto auctionItemDto) {
+        User seller = userService.validateBusinessUser(auctionItemDto.getSellerId());
+        auctionService.registerAuctionItem(auctionItemDto, seller, null);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
     //경매 조회 by 판매자
     @GetMapping("/{sellerId}/list")
     public ResponseEntity<?> auctionsBySellerId(@PathVariable("sellerId") UUID sellerId) {

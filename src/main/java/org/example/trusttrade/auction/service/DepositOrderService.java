@@ -26,15 +26,10 @@ import java.util.List;
 @Transactional
 public class DepositOrderService {
 
-    @Autowired
     private final AuctionRepository auctionRepository;
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final DepositOrderRepository depositOrderRepository;
-    @Autowired
     private final TossPaymentClient tossPaymentClient;
-    @Autowired
     private final NotificationService notificationService;
 
     //depositOrder 생성
