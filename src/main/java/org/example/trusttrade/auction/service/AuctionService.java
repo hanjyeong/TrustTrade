@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -69,7 +70,8 @@ public class AuctionService {
     // 마감된 경매 처리
     @Transactional
     public void closeExpiredAuctions() {
-        List<Auction> expiredAuctions = auctionRepository.findByEndTimeBeforeAndAuctionStatus(LocalDateTime.now(), AuctionStatus.OPEN);
+        LocalDateTime nowKST = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
+        List<Auction> expiredAuctions = auctionRepository.findByEndTimeBeforeAndAuctionStatus(nowKST, AuctionStatus.OPEN);
 
         for (Auction auction : expiredAuctions) {
             bidRepository.findTopByAuctionOrderByBidPriceDesc(auction)
