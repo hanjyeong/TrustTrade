@@ -1,6 +1,7 @@
 package org.example.trusttrade.auction.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.trusttrade.auction.service.DepositOrderService;
 import org.example.trusttrade.order.dto.ConfirmPaymentRequest;
 import org.example.trusttrade.order.dto.PaymentErrorResponse;
@@ -17,6 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/depositPayments")
 @RequiredArgsConstructor
+@Slf4j
 public class DepositPaymentController {
 
     @Autowired
@@ -29,6 +31,7 @@ public class DepositPaymentController {
         try {
             boolean success = depositOrderService.confirmAndSavePayment(confirmPaymentRequest);
             if (success) {
+                log.info("✅ 결제 승인 및 DB 저장 성공");
                 return ResponseEntity.ok(Map.of("message", "결제 승인 및 저장 성공"));
             } else {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -36,6 +39,7 @@ public class DepositPaymentController {
             }
 
         } catch (Exception e) {
+            log.warn("⚠️ DB 반영 실패");
             return ResponseEntity.badRequest().body(
                     PaymentErrorResponse.builder()
                             .code(400)
