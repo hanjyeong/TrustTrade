@@ -15,15 +15,18 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         format_sql: true
+        jdbc:
+          time_zone: Asia/Seoul
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
   jackson:
     time-zone: Asia/Seoul
+
 
 
 

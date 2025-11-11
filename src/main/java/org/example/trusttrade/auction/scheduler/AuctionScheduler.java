@@ -5,6 +5,8 @@ import org.example.trusttrade.auction.service.AuctionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class AuctionScheduler {
@@ -14,6 +16,7 @@ public class AuctionScheduler {
     @Scheduled(fixedRate = 60000)
     public void checkAndCloseAuctions() {
         auctionService.closeExpiredAuctions();
+        System.out.println(LocalDateTime.now());
         System.out.println("==Auctions closed==");
     }
 }
