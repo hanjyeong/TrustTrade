@@ -64,4 +64,7 @@
 
 ---
 
-## 📌 담당 기능 
+## 📌 API 문서 
+
+https://documenter.getpostman.com/view/33333923/2sB2qgfz7v
+
