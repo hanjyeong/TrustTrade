@@ -51,10 +51,10 @@
 
 ## 📌 기능 명세서 및 협업 과정 
 
-*** Miro**
+** Miro**
 ![Image](https://github.com/user-attachments/assets/7b3d3668-d76d-4f70-b78a-0eb4fcad0bd8)
 <br> </br> 
-*** Notion 기능 명세서  **
+** Notion 기능 명세서  **
 <img width="1000" height="752" alt="Image" src="https://github.com/user-attachments/assets/282bb8fa-0e7d-45fa-80b5-2f4c75ffa1bf" />
 
 ---
