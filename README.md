@@ -5,6 +5,7 @@
 ## 📌 프로젝트 개요 
 
 * 프로젝트 개발 기간: 2025.09~2025.11
+* 프로젝트 소개: 
 * 프로젝트 기획 배경 
 
 <img width="1000" alt="Image" src="https://github.com/user-attachments/assets/79544c28-3015-4d4a-b8af-64da2a54cbf4"/>
