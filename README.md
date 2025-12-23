@@ -66,5 +66,6 @@
 
 ## 📌 API 문서 
 
-https://documenter.getpostman.com/view/33333923/2sB2qgfz7v
+Postman Documenter: [API Documentation](https://documenter.getpostman.com/view/33333923/2sB2qgfz7v)
+
 
